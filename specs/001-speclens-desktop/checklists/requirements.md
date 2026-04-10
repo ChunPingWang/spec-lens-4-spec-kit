@@ -39,3 +39,9 @@
   retained as they describe user-visible behavior (real-time agent output, color
   rendering) rather than a specific implementation choice; the original PRD's "SHA-256"
   was generalized to "content hash" in the spec body to stay technology-agnostic.
+- 2026-04-11 `/speckit.clarify` session: 5 questions asked and answered, resolving
+  execution-control scope, per-project and cross-project state persistence location,
+  terminal buffer retention model, UI localization scope, and multi-project window
+  model. New functional requirements added: FR-047, FR-048, FR-087, FR-088, FR-090
+  through FR-093, and FR-100 through FR-103. FR-044 was tightened to explicitly forbid
+  run/retry/reset action controls. Re-validated: all checklist items still pass.

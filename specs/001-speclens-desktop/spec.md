@@ -5,6 +5,16 @@
 **Status**: Draft
 **Input**: User description: "PRD.md v1.3.0 — SpecLens: a cross-platform desktop application that gives AI developers a visual management UI for GitHub Spec-Kit, covering project management, environment checks, step/phase navigation, task checklists, terminal bridging, and multi-AI-agent support."
 
+## Clarifications
+
+### Session 2026-04-11
+
+- Q: Execution control scope — should SpecLens expose step action controls (Run / Retry / Reset) or stay strictly observational? → A: Observe-only. No UI buttons execute or mutate Spec-Kit steps. The optional PTY command-forwarding capability in FR-044 remains a power-user toggle, not a first-class workflow control.
+- Q: Where are per-project and cross-project state (recent list, last step/tab, task file selections, document hash history) stored? → A: Hybrid. Cross-project user data (recent projects list, global preferences, window layout) lives in the OS application-data directory (`~/Library/Application Support/SpecLens/` on macOS, `%APPDATA%\SpecLens\` on Windows, `~/.config/speclens/` on Linux). Per-project state (last step and phase tab, task file selection, document hash history) lives in a `.speclens/` directory at the project root; SpecLens MUST recommend adding `.speclens/` to the project's `.gitignore`.
+- Q: What is the terminal buffer retention model? → A: Rolling in-memory window with disk spill-over. The system keeps the most recent ~10,000 lines (user-adjustable) in memory; older lines are flushed to `.speclens/logs/<timestamp>.log` inside the project. Search, Overview slices, and export MUST read transparently across both tiers so the full run history remains recoverable while memory usage stays bounded and the p95 latency target (SC-003 / FR-081) is preserved.
+- Q: Which UI languages does v1 ship? → A: English and Traditional Chinese (`en`, `zh-TW`). v1 builds an i18n foundation with string resource files, defaults the UI language to the OS language where a translation exists, falls back to English otherwise, and exposes an explicit language override in settings. Product name, AI Agent brand names, and Spec-Kit CLI output remain untranslated.
+- Q: Can users work on multiple projects simultaneously, and what is the window model? → A: Multi-window, one project per window. A single SpecLens process MAY host multiple top-level windows, each bound to exactly one project with its own PTY session, terminal buffer, phase tab state, and Documents/Tasks view. Cross-project user state (recent list, preferences, UI language, highlight rules) is shared by the process; per-project state (FR-091) is strictly isolated per window.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Open a project and see the current Spec-Kit progress at a glance (Priority: P1)
@@ -371,7 +381,10 @@ re-run; confirm none appear while in-app state still updates.
   erasing history, and lock or unlock auto-scroll.
 - **FR-044**: The system MAY allow forwarding user-typed commands into the PTY process and
   MAY expose quick-command buttons for common Spec-Kit invocations, gated behind an
-  explicit setting; this capability is OPTIONAL.
+  explicit setting; this capability is OPTIONAL and is the ONLY path through which the
+  product may cause command execution. The main workspace MUST NOT expose Run, Retry,
+  Reset, or any other action controls that mutate Spec-Kit state; SpecLens is strictly
+  observational for v1 (see Clarifications 2026-04-11).
 - **FR-045**: The system MUST apply universal visual highlight rules that are independent
   of any specific agent: success markers (`✓`, `✅`, `✔`, `[done]`, `[ok]` at line start)
   produce a green background; error markers (`✗`, `❌`, `Error`, `Failed`, `FAILED`)
@@ -381,6 +394,17 @@ re-run; confirm none appear while in-app state still updates.
   open a preview.
 - **FR-046**: The highlight rules MUST be defined in a regex-based configuration file that
   users can edit to add, modify, or remove rules.
+- **FR-047**: The terminal buffer MUST use a two-tier retention model: the most recent
+  10,000 lines (user-adjustable in settings) are held in memory for low-latency rendering;
+  older lines MUST be flushed to `.speclens/logs/<ISO-8601-timestamp>.log` under the
+  active project root. Search (FR-042), Overview slices (FR-033), and export (FR-043)
+  MUST read transparently across both tiers so the complete run history is always
+  recoverable.
+- **FR-048**: Disk spill-over files MUST be rotated and capped per project with a
+  configurable total-size ceiling (default: 512 MiB per project). When the cap is
+  reached, the oldest rotation files MUST be deleted first; the user MUST see a
+  non-blocking notice the first time a rotation deletes data so they can adjust the cap
+  or export history before further loss.
 
 #### Tasks Phase
 
@@ -443,6 +467,32 @@ re-run; confirm none appear while in-app state still updates.
   (Cmd/Ctrl+O) and "clear terminal output" (Cmd/Ctrl+K), and MUST respect the operating
   system's light/dark theme preference automatically. Terminal font size MUST be
   user-adjustable.
+- **FR-087**: The user interface MUST ship in two locales for v1: English (`en`) and
+  Traditional Chinese (`zh-TW`). All user-facing UI strings MUST live in externalized
+  resource files; no translatable copy may be hard-coded. Product name, AI Agent brand
+  names, and raw Spec-Kit CLI output are NOT translated.
+- **FR-088**: On first launch, the UI language MUST default to the OS language when a
+  matching locale exists, otherwise fall back to English. The user MUST be able to
+  override the UI language at any time via a setting that takes effect without requiring
+  an application restart.
+
+#### Window & Session Model
+
+- **FR-100**: A single SpecLens process MUST support multiple top-level windows running
+  concurrently, each bound to exactly one project. Opening a second project MUST open a
+  new window rather than replace the current one; the user MUST also be able to open a
+  second window on the same project if they choose.
+- **FR-101**: Each window MUST own an independent PTY session, terminal buffer
+  (in-memory tier and `.speclens/logs/` spill-over per FR-047), phase tab state,
+  Documents state, and Tasks state. State changes in one window MUST NOT affect another
+  window.
+- **FR-102**: Cross-project user state (FR-090), the UI language (FR-087), highlight
+  rules (FR-046), and any credentials stored per FR-086 MUST be shared by all windows
+  of the same process; a change made in one window MUST become visible to the others
+  without requiring a restart.
+- **FR-103**: Closing the last window of a project MUST flush pending per-project state
+  to `.speclens/` before the window is destroyed. Closing the final window of the
+  process MUST persist all cross-project state before exit.
 - **FR-085**: The system MUST enforce a two-tier safety model: PTY command execution MUST
   be rooted to the project directory; file writes initiated by the app (e.g., exports) MUST
   be confined to the project directory; read-only access (task-file selection, preview) MAY
@@ -450,6 +500,28 @@ re-run; confirm none appear while in-app state still updates.
 - **FR-086**: The system MUST store any credentials or secrets in the OS-native secret
   store (Keychain on macOS, Credential Manager on Windows, Secret Service on Linux) and
   MUST NOT collect user data. All computation MUST stay on the local machine.
+
+#### State Persistence
+
+- **FR-090**: Cross-project user state — the recent-projects list (FR-003), global
+  preferences, window/panel layout, and the user-editable highlight-rule configuration
+  (FR-046) — MUST be persisted in the OS application-data directory: macOS
+  `~/Library/Application Support/SpecLens/`, Windows `%APPDATA%\SpecLens\`, Linux
+  `~/.config/speclens/`. This data MUST NOT be written anywhere inside a project
+  directory.
+- **FR-091**: Per-project state — the last selected step and phase tab (FR-004), the
+  per-project task-file selection (FR-052), and the document content-hash history used
+  by the Documents badges (FR-035) — MUST be persisted in a `.speclens/` directory at
+  the project root. SpecLens MUST, on first write to `.speclens/` in a given project,
+  surface a one-time prompt recommending that the user add `.speclens/` to that project's
+  `.gitignore`.
+- **FR-092**: A project MUST remain usable even when its `.speclens/` directory is
+  absent or unreadable: all per-project state reverts to sensible defaults (no history
+  for Documents badges, no prior task-file selection, no remembered step/tab) and the
+  directory is re-created on next successful write.
+- **FR-093**: No user-state file written by SpecLens MAY be written outside the two
+  locations defined in FR-090 and FR-091. This rule is enforced in addition to the
+  two-tier safety model in FR-085.
 
 ### Key Entities
 
