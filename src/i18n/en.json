@@ -1,0 +1,61 @@
+{
+  "app": {
+    "name": "SpecLens",
+    "tagline": "Visual workspace for Spec-Kit projects"
+  },
+  "welcome": {
+    "title": "Welcome to SpecLens",
+    "subtitle": "Open a Spec-Kit project to begin.",
+    "openButton": "Open Project…",
+    "recentHeading": "Recent Projects",
+    "noRecent": "No recent projects yet. Open one to get started.",
+    "pin": "Pin",
+    "unpin": "Unpin",
+    "remove": "Remove from list"
+  },
+  "workspace": {
+    "stepsHeading": "Spec-Kit Steps",
+    "progressLabel": "Completion",
+    "terminalHeading": "Terminal",
+    "noStep": "Select a step to see its documents and tasks."
+  },
+  "steps": {
+    "status": {
+      "not_started": "Not started",
+      "in_progress": "In progress",
+      "done": "Done",
+      "modified": "Modified",
+      "missing": "Missing",
+      "unknown": "Unknown"
+    },
+    "names": {
+      "1-constitution": "Constitution",
+      "2-specify": "Specify",
+      "3-clarify": "Clarify",
+      "4-plan": "Plan",
+      "5-tasks": "Tasks",
+      "6-analyze": "Analyze",
+      "7-implement": "Implement"
+    }
+  },
+  "errors": {
+    "dismiss": "Dismiss",
+    "genericTitle": "Something went wrong",
+    "openProjectFailed": "Could not open project"
+  },
+  "agent": {
+    "claudeCode": "Claude Code",
+    "copilot": "GitHub Copilot",
+    "geminiCli": "Gemini CLI",
+    "cursor": "Cursor",
+    "windsurf": "Windsurf",
+    "amazonQ": "Amazon Q",
+    "codexCli": "Codex CLI",
+    "qwenCode": "Qwen Code",
+    "opencode": "opencode",
+    "kiloCode": "Kilo Code",
+    "auggieCli": "Auggie CLI",
+    "rooCode": "Roo Code",
+    "generic": "Generic"
+  }
+}

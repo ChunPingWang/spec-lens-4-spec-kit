@@ -1,0 +1,23 @@
+# Build outputs
+dist/
+node_modules/
+src-tauri/target/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Playwright
+playwright-report/
+test-results/
+
+# Coverage
+coverage/
+*.profraw

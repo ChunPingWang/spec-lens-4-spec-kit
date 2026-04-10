@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "ruleSet": "universal",
+  "rules": [
+    {
+      "id": "error-prefix",
+      "severity": "error",
+      "pattern": "^(?:ERROR|FATAL|Error):",
+      "flags": "i"
+    },
+    {
+      "id": "warn-prefix",
+      "severity": "warn",
+      "pattern": "^(?:WARN|WARNING):",
+      "flags": "i"
+    },
+    {
+      "id": "success-marker",
+      "severity": "success",
+      "pattern": "\\b(?:PASS|OK|SUCCESS|DONE|✔|✓)\\b",
+      "flags": ""
+    },
+    {
+      "id": "info-arrow",
+      "severity": "info",
+      "pattern": "^(?:=>|\\-\\->)",
+      "flags": ""
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "app": {
+    "name": "SpecLens",
+    "tagline": "Spec-Kit 專案的視覺化工作台"
+  },
+  "welcome": {
+    "title": "歡迎使用 SpecLens",
+    "subtitle": "開啟一個 Spec-Kit 專案開始使用。",
+    "openButton": "開啟專案…",
+    "recentHeading": "最近使用的專案",
+    "noRecent": "尚無最近的專案,請先開啟一個。",
+    "pin": "釘選",
+    "unpin": "取消釘選",
+    "remove": "從列表移除"
+  },
+  "workspace": {
+    "stepsHeading": "Spec-Kit 步驟",
+    "progressLabel": "完成度",
+    "terminalHeading": "終端機",
+    "noStep": "選取一個步驟以檢視文件與任務。"
+  },
+  "steps": {
+    "status": {
+      "not_started": "未開始",
+      "in_progress": "進行中",
+      "done": "已完成",
+      "modified": "已修改",
+      "missing": "缺少檔案",
+      "unknown": "未知"
+    },
+    "names": {
+      "1-constitution": "憲章",
+      "2-specify": "需求規格",
+      "3-clarify": "澄清",
+      "4-plan": "實作規劃",
+      "5-tasks": "任務",
+      "6-analyze": "分析",
+      "7-implement": "實作"
+    }
+  },
+  "errors": {
+    "dismiss": "關閉",
+    "genericTitle": "發生錯誤",
+    "openProjectFailed": "無法開啟專案"
+  },
+  "agent": {
+    "claudeCode": "Claude Code",
+    "copilot": "GitHub Copilot",
+    "geminiCli": "Gemini CLI",
+    "cursor": "Cursor",
+    "windsurf": "Windsurf",
+    "amazonQ": "Amazon Q",
+    "codexCli": "Codex CLI",
+    "qwenCode": "Qwen Code",
+    "opencode": "opencode",
+    "kiloCode": "Kilo Code",
+    "auggieCli": "Auggie CLI",
+    "rooCode": "Roo Code",
+    "generic": "通用"
+  }
+}

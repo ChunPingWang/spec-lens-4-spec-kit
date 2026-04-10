@@ -1,0 +1,7 @@
+{
+  "tasks": [
+    { "id": "T001", "title": "First item", "status": "todo" },
+    { "id": "T002", "title": "Second item", "status": "done" },
+    { "id": "T003", "title": "Third item", "status": "in_progress" }
+  ]
+}

@@ -1,0 +1,3 @@
+First plain-text task
+Second plain-text task
+Third plain-text task
