@@ -46,6 +46,8 @@ pub fn register<R: Runtime>(builder: tauri::Builder<R>) -> tauri::Builder<R> {
         terminal::terminal_resize,
         terminal::terminal_get_slice,
         terminal::terminal_search,
+        terminal::terminal_get_config,
+        terminal::terminal_set_config,
         // agent.*
         agent::agent_detect,
         agent::agent_list_known,

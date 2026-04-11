@@ -7,10 +7,14 @@
 pub mod app_data_store;
 pub mod doc_hash_store;
 pub mod fs_watcher;
+pub mod highlight_rules;
+pub mod output_buffer;
 pub mod phase_scanner;
 pub mod state_store;
+pub mod terminal_bridge;
 
 pub use app_data_store::AppDataStore;
 pub use fs_watcher::{FsWatcher, FsWatcherEvent};
 pub use phase_scanner::PhaseScanner;
 pub use state_store::StateStore;
+pub use terminal_bridge::{BridgeEvent, TerminalBridge, TerminalConfig, TerminalSession};

@@ -40,6 +40,15 @@
     "truncatedNotice": "Preview truncated — open the file in your editor for the full content.",
     "tasksPlaceholder": "Task file picker lands in Phase 6 (US4)."
   },
+  "terminal": {
+    "idle": "Not connected",
+    "connecting": "Connecting…",
+    "connected": "Connected • {{shell}}",
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "autoScrollLabel": "Auto-scroll",
+    "mirrorLabel": "Terminal output mirror"
+  },
   "steps": {
     "status": {
       "not_started": "Not started",

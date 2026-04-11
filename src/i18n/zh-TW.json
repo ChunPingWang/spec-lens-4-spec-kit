@@ -40,6 +40,15 @@
     "truncatedNotice": "預覽已截斷 — 請至編輯器開啟完整內容。",
     "tasksPlaceholder": "任務檔選擇器將於 Phase 6 (US4) 提供。"
   },
+  "terminal": {
+    "idle": "未連線",
+    "connecting": "連線中…",
+    "connected": "已連線 • {{shell}}",
+    "connect": "連線",
+    "disconnect": "中斷連線",
+    "autoScrollLabel": "自動捲動",
+    "mirrorLabel": "終端機輸出鏡像"
+  },
   "steps": {
     "status": {
       "not_started": "未開始",

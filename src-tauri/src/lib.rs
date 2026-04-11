@@ -10,9 +10,10 @@ pub mod models;
 pub mod services;
 pub mod state;
 
-use tauri::Manager;
+use tauri::{Emitter, Manager};
 use tracing_subscriber::{EnvFilter, FmtSubscriber};
 
+use crate::services::BridgeEvent;
 use crate::state::AppState;
 
 /// Boot the Tauri application. Called from `main.rs`.
@@ -34,6 +35,49 @@ pub fn run() {
                 .app_data_dir()
                 .expect("failed to resolve app data dir");
             app.manage(AppState::new(app_data_dir));
+
+            // Pull the terminal event receiver and spawn a forwarder that
+            // re-emits BridgeEvent payloads as Tauri events the frontend
+            // subscribes to via `subscribe('pty_output', ...)`.
+            let state = app.state::<AppState>();
+            let rx = state
+                .terminal_event_rx
+                .lock()
+                .expect("terminal_event_rx mutex")
+                .take()
+                .expect("terminal_event_rx already taken");
+            let handle = app.handle().clone();
+            std::thread::spawn(move || {
+                for event in rx {
+                    match event {
+                        BridgeEvent::Lines { session_id, lines } => {
+                            let _ = handle.emit(
+                                "pty_output",
+                                serde_json::json!({
+                                    "sessionId": session_id,
+                                    "lines": lines,
+                                }),
+                            );
+                        }
+                        BridgeEvent::Spilled {
+                            session_id,
+                            evicted_count,
+                        } => {
+                            let _ = handle.emit(
+                                "buffer_spilled",
+                                serde_json::json!({
+                                    "sessionId": session_id,
+                                    "evictedCount": evicted_count,
+                                }),
+                            );
+                        }
+                        BridgeEvent::Closed { session_id } => {
+                            let _ = handle
+                                .emit("pty_closed", serde_json::json!({ "sessionId": session_id }));
+                        }
+                    }
+                }
+            });
             Ok(())
         });
 

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { PhaseTabs } from "@/components/phase/PhaseTabs";
+import { TerminalPanel } from "@/components/terminal/TerminalPanel";
 import { invoke } from "@/lib/tauri";
 import { useProjectStore, useStepsStore } from "@/stores";
 import type { Step } from "@/types/ipc";
@@ -131,8 +132,8 @@ export function Workspace() {
         )}
       </div>
 
-      <aside className="flex flex-col rounded-md border border-border bg-card p-3">
-        <h2 className="text-sm font-semibold">{t("workspace.terminalHeading")}</h2>
+      <aside className="flex flex-col overflow-hidden rounded-md border border-border bg-card">
+        <TerminalPanel projectId={project.id} />
       </aside>
     </section>
   );
