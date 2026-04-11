@@ -245,6 +245,20 @@ export interface PtySessionDescriptor {
   startedAt: string;
 }
 
+export type NotifyLevel = "info" | "warn" | "error";
+
+export interface NotifyRequest {
+  title: string;
+  body: string;
+  level?: NotifyLevel;
+}
+
+export interface PreparedNotification {
+  title: string;
+  body: string;
+  level: NotifyLevel;
+}
+
 export interface IpcError {
   code: string;
   message: string;

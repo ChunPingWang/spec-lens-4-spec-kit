@@ -57,5 +57,8 @@ pub fn register<R: Runtime>(builder: tauri::Builder<R>) -> tauri::Builder<R> {
         config::config_set_language,
         config::config_set_theme,
         config::config_set_terminal_limits,
+        config::config_set_notifications_enabled,
+        // notify.*
+        config::notify_system,
     ])
 }

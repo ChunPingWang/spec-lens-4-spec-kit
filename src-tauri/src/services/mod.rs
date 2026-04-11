@@ -9,6 +9,7 @@ pub mod app_data_store;
 pub mod doc_hash_store;
 pub mod fs_watcher;
 pub mod highlight_rules;
+pub mod notification_dispatcher;
 pub mod output_buffer;
 pub mod phase_scanner;
 pub mod state_store;

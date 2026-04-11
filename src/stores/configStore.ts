@@ -15,6 +15,12 @@ interface ConfigState {
   load: () => Promise<void>;
   setLanguage: (language: LanguagePreference) => Promise<void>;
   setTheme: (theme: ThemePreference) => Promise<void>;
+  /**
+   * Phase 9 US7 toggle (FR-070). Persists through `config_set_*` so the
+   * backend remains the source of truth. The store always reflects the
+   * value the backend last accepted, never an optimistic guess.
+   */
+  setNotificationsEnabled: (enabled: boolean) => Promise<void>;
 }
 
 export const useConfigStore = create<ConfigState>((set) => ({
@@ -39,6 +45,11 @@ export const useConfigStore = create<ConfigState>((set) => ({
 
   setTheme: async (theme) => {
     const config = await invoke<AppConfig>("config_set_theme", { theme });
+    set({ config });
+  },
+
+  setNotificationsEnabled: async (enabled) => {
+    const config = await invoke<AppConfig>("config_set_notifications_enabled", { enabled });
     set({ config });
   },
 }));

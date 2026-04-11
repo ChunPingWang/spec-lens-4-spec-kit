@@ -144,6 +144,14 @@
     "genericTitle": "發生錯誤",
     "openProjectFailed": "無法開啟專案"
   },
+  "notifications": {
+    "toggleLabel": "系統通知",
+    "toggleHint": "當 SpecLens 視窗未聚焦時,Spec-Kit 步驟完成或失敗會跳出原生通知。",
+    "stepDoneTitle": "{{name}} 已完成",
+    "stepDoneBody": "Spec-Kit 步驟「{{name}}」已成功完成。",
+    "stepFailedTitle": "{{name}} 失敗",
+    "stepFailedBody": "Spec-Kit 步驟「{{name}}」需要處理,請開啟 SpecLens 查看詳情。"
+  },
   "agent": {
     "claudeCode": "Claude Code",
     "copilot": "GitHub Copilot",

@@ -5,9 +5,10 @@ import { EnvCheckDialog } from "@/components/env/EnvCheckDialog";
 import { UpdateBanner } from "@/components/env/UpdateBanner";
 import { PhaseTabs } from "@/components/phase/PhaseTabs";
 import { TerminalPanel } from "@/components/terminal/TerminalPanel";
+import { useSpeckitEvents } from "@/hooks/useSpeckitEvents";
 import { invoke } from "@/lib/tauri";
 import { deriveBadgeColor, useEnvStore } from "@/stores/envStore";
-import { useProjectStore, useStepsStore } from "@/stores";
+import { useConfigStore, useProjectStore, useStepsStore } from "@/stores";
 import type { Step } from "@/types/ipc";
 
 /**
@@ -29,6 +30,21 @@ export function Workspace() {
   const envAcknowledged = useEnvStore((s) => s.acknowledged);
   const checkEnv = useEnvStore((s) => s.check);
   const clearEnv = useEnvStore((s) => s.clear);
+
+  const config = useConfigStore((s) => s.config);
+  const loadConfig = useConfigStore((s) => s.load);
+
+  // Subscribe to backend `steps_state_changed` events and dispatch
+  // OS-native notifications when the toggle is on (US7 / FR-070).
+  useSpeckitEvents();
+
+  // Hydrate the cross-project config once so the notification toggle
+  // and other settings are immediately readable.
+  useEffect(() => {
+    if (!config) {
+      void loadConfig();
+    }
+  }, [config, loadConfig]);
 
   // Kick off the Spec-Kit env check the moment a project is attached
   // (FR-010). We never auto-acknowledge — the dialog owns that choice.

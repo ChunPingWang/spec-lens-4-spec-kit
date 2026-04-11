@@ -144,6 +144,14 @@
     "genericTitle": "Something went wrong",
     "openProjectFailed": "Could not open project"
   },
+  "notifications": {
+    "toggleLabel": "OS notifications",
+    "toggleHint": "Show a system toast when a Spec-Kit step finishes while SpecLens is in the background.",
+    "stepDoneTitle": "{{name}} completed",
+    "stepDoneBody": "The Spec-Kit step \"{{name}}\" finished successfully.",
+    "stepFailedTitle": "{{name}} failed",
+    "stepFailedBody": "The Spec-Kit step \"{{name}}\" needs attention. Open SpecLens to see the details."
+  },
   "agent": {
     "claudeCode": "Claude Code",
     "copilot": "GitHub Copilot",
