@@ -1,6 +1,7 @@
 import type { PropsWithChildren } from "react";
 import { useTranslation } from "react-i18next";
 
+import { AgentBadge } from "@/components/agent/AgentBadge";
 import type { AgentProfile } from "@/types/ipc";
 
 interface ProjectHeaderInfo {
@@ -62,15 +63,7 @@ export function TopBar({ project, children }: PropsWithChildren<TopBarProps>) {
         )}
       </div>
       <div className="flex items-center gap-2">
-        {project?.agent && (
-          <span
-            className="rounded-full border border-border bg-muted px-2 py-0.5 text-xs text-muted-foreground"
-            aria-label="agent-badge"
-            title={project.agent.displayName}
-          >
-            {project.agent.displayName}
-          </span>
-        )}
+        {project?.agent && <AgentBadge agent={project.agent} />}
         {children}
       </div>
     </header>

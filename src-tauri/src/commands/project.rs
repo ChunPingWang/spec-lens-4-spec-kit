@@ -8,8 +8,8 @@ use tracing::info;
 use uuid::Uuid;
 
 use crate::error::{IpcError, IpcResult, SpecLensError};
-use crate::models::{AgentProfile, EnvironmentStatus, Project, RecentProject};
-use crate::services::{PhaseScanner, StateStore};
+use crate::models::{EnvironmentStatus, Project, RecentProject};
+use crate::services::{agent_detector, PhaseScanner, StateStore};
 use crate::state::{AppState, OpenProject};
 
 #[tauri::command]
@@ -42,9 +42,12 @@ pub async fn project_open(path: String, state: State<'_, AppState>) -> IpcResult
     let mut project_state = state_store.load_state().unwrap_or_default();
     project_state.last_opened_at = Utc::now();
 
-    // Placeholder env + agent for US1; real detection lands in US5/US7.
+    // Placeholder env for US1; real detection lands in US5. Agent
+    // detection (US6) runs synchronously here so the TopBar shows the
+    // correct badge from the very first render.
     let environment = EnvironmentStatus::placeholder();
-    let agent = AgentProfile::generic();
+    let agent =
+        agent_detector::detect(&root).unwrap_or_else(|_| crate::models::AgentProfile::generic());
 
     let project = Project {
         id,

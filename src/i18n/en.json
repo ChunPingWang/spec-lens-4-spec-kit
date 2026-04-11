@@ -157,6 +157,11 @@
     "kiloCode": "Kilo Code",
     "auggieCli": "Auggie CLI",
     "rooCode": "Roo Code",
-    "generic": "Generic"
+    "generic": "Generic",
+    "source": {
+      "configured": "Configured",
+      "autoDetected": "Auto-detected",
+      "generic": "Generic mode"
+    }
   }
 }

@@ -157,6 +157,11 @@
     "kiloCode": "Kilo Code",
     "auggieCli": "Auggie CLI",
     "rooCode": "Roo Code",
-    "generic": "通用"
+    "generic": "通用",
+    "source": {
+      "configured": "已設定",
+      "autoDetected": "自動偵測",
+      "generic": "通用模式"
+    }
   }
 }

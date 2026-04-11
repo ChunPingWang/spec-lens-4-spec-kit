@@ -4,6 +4,7 @@
 //! outside of tests. IPC command handlers call into these services rather
 //! than performing IO directly.
 
+pub mod agent_detector;
 pub mod app_data_store;
 pub mod doc_hash_store;
 pub mod fs_watcher;
