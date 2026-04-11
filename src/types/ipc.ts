@@ -62,12 +62,21 @@ export type DocKind =
 
 export type DocStatus = "generated" | "modified" | "missing" | "unverified";
 
+export interface DocHashRecord {
+  path: string;
+  sha256: string;
+  generatedAt: string;
+  lastVerifiedAt: string;
+}
+
 export interface PhaseDocument {
-  kind: DocKind;
   relativePath: string;
+  displayName: string;
+  kind: DocKind;
+  hash?: DocHashRecord | null;
   status: DocStatus;
-  sizeBytes: number;
-  lastModifiedAt: string;
+  size: number;
+  modifiedAt: string;
 }
 
 export interface Step {

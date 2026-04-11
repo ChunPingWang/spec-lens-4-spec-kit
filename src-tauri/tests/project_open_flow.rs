@@ -81,6 +81,25 @@ fn app_data_store_bumps_recent_project_on_open() {
 }
 
 #[test]
+fn last_step_id_round_trips_between_state_store_sessions() {
+    // T062: simulate selecting a step, closing the project, reopening it,
+    // and confirming the selection survived.
+    let (_tmp, root) = fixture_project_ok();
+
+    // First session: user picks "4-plan".
+    let store_a = StateStore::new(root.clone());
+    let mut state_a = store_a.load_state().expect("load a");
+    state_a.last_step_id = Some("4-plan".into());
+    store_a.save_state(&state_a).expect("save a");
+
+    // Second session: re-opening the project should restore the selection
+    // (equivalent to project_open calling `load_state().unwrap_or_default()`).
+    let store_b = StateStore::new(root);
+    let state_b = store_b.load_state().expect("load b");
+    assert_eq!(state_b.last_step_id.as_deref(), Some("4-plan"));
+}
+
+#[test]
 fn placeholder_steps_cover_all_seven_spec_kit_phases() {
     let steps = PhaseScanner::placeholder_steps();
     let ids: Vec<&str> = steps.iter().map(|s| s.id.as_str()).collect();

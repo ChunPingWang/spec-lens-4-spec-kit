@@ -19,6 +19,27 @@
     "terminalHeading": "終端機",
     "noStep": "選取一個步驟以檢視文件與任務。"
   },
+  "phase": {
+    "tabsLabel": "階段子頁",
+    "tabs": {
+      "overview": "總覽",
+      "documents": "文件",
+      "tasks": "任務"
+    },
+    "docStatus": {
+      "generated": "已產出",
+      "modified": "已修改",
+      "missing": "缺少檔案",
+      "unverified": "未驗證"
+    },
+    "noDocuments": "此步驟尚無追蹤的文件。",
+    "loadingDocument": "載入文件中…",
+    "loadingOverview": "載入總覽中…",
+    "noOverview": "尚無總覽內容 — 執行此步驟以產出摘要。",
+    "selectDocumentHint": "點選左側文件即可預覽內容。",
+    "truncatedNotice": "預覽已截斷 — 請至編輯器開啟完整內容。",
+    "tasksPlaceholder": "任務檔選擇器將於 Phase 6 (US4) 提供。"
+  },
   "steps": {
     "status": {
       "not_started": "未開始",

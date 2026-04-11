@@ -24,6 +24,7 @@ pub fn register<R: Runtime>(builder: tauri::Builder<R>) -> tauri::Builder<R> {
         project::project_list_recent,
         project::project_remove_recent,
         project::project_pin_recent,
+        project::project_set_last_step,
         project::project_close,
         // speckit.*
         speckit::steps_list,
@@ -32,6 +33,7 @@ pub fn register<R: Runtime>(builder: tauri::Builder<R>) -> tauri::Builder<R> {
         phase::phase_overview,
         phase::phase_documents_list,
         phase::phase_document_read,
+        phase::phase_recompute_hashes,
         // tasks.*
         tasks::tasks_scan,
         tasks::tasks_parse,

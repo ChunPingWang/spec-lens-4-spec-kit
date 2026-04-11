@@ -19,6 +19,27 @@
     "terminalHeading": "Terminal",
     "noStep": "Select a step to see its documents and tasks."
   },
+  "phase": {
+    "tabsLabel": "Phase sub-pages",
+    "tabs": {
+      "overview": "Overview",
+      "documents": "Documents",
+      "tasks": "Tasks"
+    },
+    "docStatus": {
+      "generated": "Generated",
+      "modified": "Modified",
+      "missing": "Missing",
+      "unverified": "Unverified"
+    },
+    "noDocuments": "This step has no tracked documents yet.",
+    "loadingDocument": "Loading document…",
+    "loadingOverview": "Loading overview…",
+    "noOverview": "No overview content yet — run this step to populate its summary.",
+    "selectDocumentHint": "Select a document on the left to preview it.",
+    "truncatedNotice": "Preview truncated — open the file in your editor for the full content.",
+    "tasksPlaceholder": "Task file picker lands in Phase 6 (US4)."
+  },
   "steps": {
     "status": {
       "not_started": "Not started",

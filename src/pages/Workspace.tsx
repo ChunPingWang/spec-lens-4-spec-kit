@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
+import { PhaseTabs } from "@/components/phase/PhaseTabs";
 import { invoke } from "@/lib/tauri";
 import { useProjectStore, useStepsStore } from "@/stores";
 import type { Step } from "@/types/ipc";
@@ -20,23 +21,42 @@ export function Workspace() {
   const selectStep = useStepsStore((s) => s.selectStep);
   const completionPercent = useStepsStore((s) => s.completionPercent);
 
-  // Load steps for the active project. The backend reads from the
-  // open-projects table seeded by `project_open`.
+  // Load steps for the active project and restore the persisted
+  // `lastStepId` selection (T062 / FR-062).
   useEffect(() => {
     if (!project) return;
     let cancelled = false;
     void (async () => {
       try {
         const loaded = await invoke<Step[]>("steps_list", { projectId: project.id });
-        if (!cancelled) setSteps(loaded);
+        if (cancelled) return;
+        setSteps(loaded);
+        const restored =
+          project.state.lastStepId && loaded.some((s) => s.id === project.state.lastStepId)
+            ? project.state.lastStepId
+            : loaded[0]?.id ?? null;
+        selectStep(restored);
       } catch {
-        if (!cancelled) setSteps(project.steps ?? []);
+        if (cancelled) return;
+        const fallback = project.steps ?? [];
+        setSteps(fallback);
+        selectStep(project.state.lastStepId ?? fallback[0]?.id ?? null);
       }
     })();
     return () => {
       cancelled = true;
     };
-  }, [project, setSteps]);
+  }, [project, setSteps, selectStep]);
+
+  async function handleSelectStep(id: string): Promise<void> {
+    selectStep(id);
+    if (!project) return;
+    try {
+      await invoke("project_set_last_step", { projectId: project.id, stepId: id });
+    } catch {
+      // Non-fatal: selection still works in-memory for this session.
+    }
+  }
 
   if (!project) return null;
 
@@ -84,7 +104,9 @@ export function Workspace() {
               <li key={s.id}>
                 <button
                   type="button"
-                  onClick={() => selectStep(s.id)}
+                  onClick={() => {
+                    void handleSelectStep(s.id);
+                  }}
                   className={`flex w-full items-center justify-between rounded-sm px-2 py-1 text-left ${
                     active ? "bg-accent text-accent-foreground" : "hover:bg-accent/60"
                   }`}
@@ -101,9 +123,12 @@ export function Workspace() {
         </ul>
       </aside>
 
-      <div className="flex flex-col rounded-md border border-border bg-card p-3">
-        <h2 className="text-sm font-semibold">{project.rootPath}</h2>
-        <p className="mt-2 text-sm text-muted-foreground">{t("workspace.noStep")}</p>
+      <div className="flex flex-col overflow-hidden rounded-md border border-border bg-card">
+        {selectedStepId ? (
+          <PhaseTabs projectId={project.id} stepId={selectedStepId} />
+        ) : (
+          <p className="p-4 text-sm text-muted-foreground">{t("workspace.noStep")}</p>
+        )}
       </div>
 
       <aside className="flex flex-col rounded-md border border-border bg-card p-3">

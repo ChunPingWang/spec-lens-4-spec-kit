@@ -5,6 +5,7 @@
 //! than performing IO directly.
 
 pub mod app_data_store;
+pub mod doc_hash_store;
 pub mod fs_watcher;
 pub mod phase_scanner;
 pub mod state_store;

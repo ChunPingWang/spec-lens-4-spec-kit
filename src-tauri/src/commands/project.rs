@@ -132,6 +132,39 @@ pub async fn project_pin_recent(
 }
 
 #[tauri::command]
+pub async fn project_set_last_step(
+    project_id: Uuid,
+    step_id: Option<String>,
+    state: State<'_, AppState>,
+) -> IpcResult<()> {
+    let mut open = state
+        .open_projects
+        .lock()
+        .map_err(|_| IpcError::new("E_INTERNAL", "open projects mutex poisoned"))?;
+    let entry = open.get_mut(&project_id).ok_or_else(|| {
+        IpcError::new("E_PATH_NOT_FOUND", "project is not currently open")
+            .hint_or("Open the project first with project.open.")
+    })?;
+
+    // Validate step id exists on the project (or accept `None` to clear).
+    if let Some(ref sid) = step_id {
+        if !entry.project.steps.iter().any(|s| &s.id == sid) {
+            return Err(
+                IpcError::new("E_STEP_NOT_FOUND", format!("unknown step id: {sid}"))
+                    .hint_or("Refresh the steps list; this id may be stale."),
+            );
+        }
+    }
+
+    entry.project.state.last_step_id = step_id;
+    entry
+        .state_store
+        .save_state(&entry.project.state)
+        .map_err(IpcError::from)?;
+    Ok(())
+}
+
+#[tauri::command]
 pub async fn project_close(id: Uuid, state: State<'_, AppState>) -> IpcResult<()> {
     let mut open = state
         .open_projects
