@@ -40,6 +40,51 @@
     "truncatedNotice": "Preview truncated — open the file in your editor for the full content.",
     "tasksPlaceholder": "Task file picker lands in Phase 6 (US4)."
   },
+  "tasks": {
+    "pickerTitle": "Pick task files",
+    "pickerHint": "Nothing is pre-selected — pick at least one file to open as a tab.",
+    "scanning": "Scanning project…",
+    "noCandidates": "No task files detected automatically. Paste a project-relative path below.",
+    "manualPathPlaceholder": "Project-relative path (e.g. specs/001/tasks.md)",
+    "manualPathLabel": "Manual path",
+    "addManual": "Add path",
+    "cancel": "Cancel",
+    "confirm": "Open selected",
+    "fileBarLabel": "Task files",
+    "noTabs": "No task files selected.",
+    "completionBadge": "{{done}} of {{total}} complete",
+    "closeTab": "Close {{path}}",
+    "addFile": "+ add file",
+    "filterLabel": "Filter tasks",
+    "filter": {
+      "all": "All",
+      "completed": "Completed",
+      "incomplete": "Incomplete"
+    },
+    "searchPlaceholder": "Search tasks…",
+    "searchLabel": "Search tasks",
+    "empty": "No tasks match the current filter.",
+    "noActive": "Select a task file tab above.",
+    "status": {
+      "todo": "To do",
+      "in_progress": "In progress",
+      "done": "Done",
+      "skipped": "Skipped"
+    },
+    "progress": {
+      "single": "Progress",
+      "combined": "Combined progress",
+      "current": "Current file: {{name}}"
+    },
+    "detail": {
+      "description": "Description",
+      "section": "Section",
+      "filePath": "File",
+      "terminalSlice": "≈ 30 s before completion",
+      "noSlice": "No terminal output captured for this task yet.",
+      "errorSummary": "Error summary"
+    }
+  },
   "terminal": {
     "idle": "Not connected",
     "connecting": "Connecting…",

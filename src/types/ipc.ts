@@ -100,6 +100,19 @@ export interface TaskFile {
   parsedAt: string;
 }
 
+/** Lightweight descriptor returned by `tasks_scan_files`. */
+export interface TaskFileCandidate {
+  relativePath: string;
+  displayName: string;
+  format: TaskFileFormat;
+}
+
+/** Response for `tasks_parse_file`. */
+export interface TasksParseResponse {
+  file: TaskFile;
+  entries: TaskEntry[];
+}
+
 export type TaskStatus = "todo" | "in_progress" | "done" | "skipped";
 
 export interface TaskEntry {

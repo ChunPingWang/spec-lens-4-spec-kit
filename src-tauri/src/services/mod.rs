@@ -11,10 +11,13 @@ pub mod highlight_rules;
 pub mod output_buffer;
 pub mod phase_scanner;
 pub mod state_store;
+pub mod task_file_scanner;
+pub mod tasks_parser;
 pub mod terminal_bridge;
 
 pub use app_data_store::AppDataStore;
 pub use fs_watcher::{FsWatcher, FsWatcherEvent};
 pub use phase_scanner::PhaseScanner;
 pub use state_store::StateStore;
+pub use task_file_scanner::{scan as scan_task_files, TaskFileCandidate};
 pub use terminal_bridge::{BridgeEvent, TerminalBridge, TerminalConfig, TerminalSession};

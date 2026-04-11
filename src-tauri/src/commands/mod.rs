@@ -35,10 +35,9 @@ pub fn register<R: Runtime>(builder: tauri::Builder<R>) -> tauri::Builder<R> {
         phase::phase_document_read,
         phase::phase_recompute_hashes,
         // tasks.*
-        tasks::tasks_scan,
-        tasks::tasks_parse,
-        tasks::tasks_pick_files,
-        tasks::tasks_set_selected,
+        tasks::tasks_scan_files,
+        tasks::tasks_parse_file,
+        tasks::tasks_state_set_selected,
         // terminal.*
         terminal::terminal_attach,
         terminal::terminal_detach,

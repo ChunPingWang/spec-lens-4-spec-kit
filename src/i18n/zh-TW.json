@@ -40,6 +40,51 @@
     "truncatedNotice": "預覽已截斷 — 請至編輯器開啟完整內容。",
     "tasksPlaceholder": "任務檔選擇器將於 Phase 6 (US4) 提供。"
   },
+  "tasks": {
+    "pickerTitle": "選擇任務檔",
+    "pickerHint": "預設不會勾選任何項目 — 至少選一個檔案才能開啟分頁。",
+    "scanning": "正在掃描專案…",
+    "noCandidates": "未自動偵測到任務檔,請於下方貼上專案相對路徑。",
+    "manualPathPlaceholder": "專案相對路徑(例如 specs/001/tasks.md)",
+    "manualPathLabel": "手動路徑",
+    "addManual": "加入路徑",
+    "cancel": "取消",
+    "confirm": "開啟所選",
+    "fileBarLabel": "任務檔",
+    "noTabs": "尚未選取任務檔。",
+    "completionBadge": "已完成 {{done}} / {{total}}",
+    "closeTab": "關閉 {{path}}",
+    "addFile": "+ 新增檔案",
+    "filterLabel": "任務篩選",
+    "filter": {
+      "all": "全部",
+      "completed": "已完成",
+      "incomplete": "未完成"
+    },
+    "searchPlaceholder": "搜尋任務…",
+    "searchLabel": "搜尋任務",
+    "empty": "沒有符合目前篩選條件的任務。",
+    "noActive": "請於上方選取任務檔分頁。",
+    "status": {
+      "todo": "待辦",
+      "in_progress": "進行中",
+      "done": "已完成",
+      "skipped": "略過"
+    },
+    "progress": {
+      "single": "進度",
+      "combined": "整體進度",
+      "current": "目前檔案:{{name}}"
+    },
+    "detail": {
+      "description": "描述",
+      "section": "區段",
+      "filePath": "檔案",
+      "terminalSlice": "完成前約 30 秒",
+      "noSlice": "此任務尚未擷取到終端機輸出。",
+      "errorSummary": "錯誤摘要"
+    }
+  },
   "terminal": {
     "idle": "未連線",
     "connecting": "連線中…",

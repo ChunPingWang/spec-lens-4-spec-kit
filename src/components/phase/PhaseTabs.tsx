@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { DocumentList } from "./DocumentList";
 import { DocumentPreview } from "./DocumentPreview";
 import { OverviewPanel } from "./OverviewPanel";
+import { TasksPanel } from "@/components/tasks/TasksPanel";
 import { usePhaseStore } from "@/stores";
 import type { PhaseTab, Uuid } from "@/types/ipc";
 
@@ -79,13 +80,7 @@ export function PhaseTabs({ projectId, stepId }: PhaseTabsProps) {
             </div>
           </div>
         )}
-        {activeTab === "tasks" && !tasksLocked && (
-          <p className="p-4 text-sm text-muted-foreground">
-            {t("phase.tasksPlaceholder", {
-              defaultValue: "Task file picker lands in Phase 6 (US4).",
-            })}
-          </p>
-        )}
+        {activeTab === "tasks" && !tasksLocked && <TasksPanel projectId={projectId} />}
       </div>
     </div>
   );
