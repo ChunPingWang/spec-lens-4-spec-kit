@@ -144,6 +144,18 @@ export interface EnvironmentStatus {
   issues: EnvIssue[];
 }
 
+export interface InstallGuideStep {
+  title: string;
+  description: string;
+  command?: string;
+}
+
+export interface InstallGuide {
+  platform: string;
+  steps: InstallGuideStep[];
+  releaseNotesUrl: string;
+}
+
 export type AgentId =
   | "claude-code"
   | "copilot"

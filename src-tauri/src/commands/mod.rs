@@ -29,6 +29,8 @@ pub fn register<R: Runtime>(builder: tauri::Builder<R>) -> tauri::Builder<R> {
         // speckit.*
         speckit::steps_list,
         speckit::steps_get,
+        speckit::env_check,
+        speckit::env_get_install_guide,
         // phase.*
         phase::phase_overview,
         phase::phase_documents_list,

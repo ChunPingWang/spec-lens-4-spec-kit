@@ -85,6 +85,32 @@
       "errorSummary": "Error summary"
     }
   },
+  "env": {
+    "title": {
+      "red": "Spec-Kit CLI is not available",
+      "amber": "Spec-Kit CLI needs attention",
+      "green": "Spec-Kit environment is ready"
+    },
+    "badge": {
+      "red": "Blocked",
+      "amber": "Warning",
+      "green": "Ready"
+    },
+    "installedVersion": "Installed",
+    "latestVersion": "Latest",
+    "allClear": "Your Spec-Kit CLI is installed and up to date.",
+    "recheck": "Re-check",
+    "rechecking": "Checking…",
+    "continue": "Continue",
+    "continueAnyway": "Continue anyway",
+    "loadingGuide": "Loading install guide…",
+    "installGuideLabel": "Spec-Kit install guide",
+    "platform": "Platform: {{platform}}",
+    "releaseNotes": "Release notes",
+    "updateAvailable": "Spec-Kit {{installed}} is installed — latest is {{latest}}.",
+    "warnBanner": "Spec-Kit environment reported a warning.",
+    "checking": "Checking your Spec-Kit environment…"
+  },
   "terminal": {
     "idle": "Not connected",
     "connecting": "Connecting…",

@@ -14,6 +14,7 @@ pub mod state_store;
 pub mod task_file_scanner;
 pub mod tasks_parser;
 pub mod terminal_bridge;
+pub mod version_checker;
 
 pub use app_data_store::AppDataStore;
 pub use fs_watcher::{FsWatcher, FsWatcherEvent};

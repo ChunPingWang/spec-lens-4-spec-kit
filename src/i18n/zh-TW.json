@@ -85,6 +85,32 @@
       "errorSummary": "錯誤摘要"
     }
   },
+  "env": {
+    "title": {
+      "red": "找不到可用的 Spec-Kit CLI",
+      "amber": "Spec-Kit CLI 需要處理",
+      "green": "Spec-Kit 環境已就緒"
+    },
+    "badge": {
+      "red": "已阻擋",
+      "amber": "警告",
+      "green": "就緒"
+    },
+    "installedVersion": "已安裝版本",
+    "latestVersion": "最新版本",
+    "allClear": "Spec-Kit CLI 已安裝並為最新版本。",
+    "recheck": "重新檢查",
+    "rechecking": "檢查中…",
+    "continue": "繼續",
+    "continueAnyway": "仍要繼續",
+    "loadingGuide": "載入安裝指引中…",
+    "installGuideLabel": "Spec-Kit 安裝指引",
+    "platform": "平台:{{platform}}",
+    "releaseNotes": "發行說明",
+    "updateAvailable": "已安裝 Spec-Kit {{installed}} — 最新版本為 {{latest}}。",
+    "warnBanner": "Spec-Kit 環境有警告訊息。",
+    "checking": "正在檢查 Spec-Kit 環境…"
+  },
   "terminal": {
     "idle": "未連線",
     "connecting": "連線中…",
