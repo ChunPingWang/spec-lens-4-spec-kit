@@ -326,7 +326,7 @@
 - [X] T153 [P] Add criterion bench `src-tauri/benches/bench_main.rs::doc_hash_recompute` asserting ≤ 5 ms for a 1 MiB Markdown file
 - [ ] T154 [P] Add Playwright performance probe `tests/e2e/perf-cold-start.spec.ts` asserting p95 cold start ≤ 2 s (SC-001 / FR-080)
 - [ ] T155 [P] Add Playwright probe `tests/e2e/perf-workspace-render.spec.ts` asserting p95 ≤ 3 s from folder pick to full workspace render (SC-002)
-- [ ] T156 [P] Complete `src/i18n/zh-TW.json` translations for every string key used in Phases 3–9, leaving product name, agent names, and Spec-Kit CLI output untranslated (FR-087)
+- [X] T156 [P] `src/i18n/zh-TW.json` fully translated (129/129 leaf keys, product + agent names retained per FR-087); `src/i18n/i18n.test.ts` extended with a T156 unknown-key audit that walks `src/**/*.{ts,tsx}` and fails CI on any literal `t('key')` call missing from `en.json`
 - [X] T157 [P] Add `src/i18n/i18n.test.ts` asserting `en` and `zh-TW` resource files have identical key trees and non-empty string values
 - [ ] T158 [P] Add axe-core a11y checks in `tests/e2e/a11y.spec.ts` covering Welcome, Workspace, TasksPanel, and EnvCheckDialog (WCAG 2.1 AA)
 - [ ] T159 [P] Add `tests/e2e/safety-two-tier.spec.ts` asserting PTY `cwd` and file writes stay within the project root (FR-085 / FR-093)
@@ -339,7 +339,7 @@
 - [ ] T166 [P] Add `tests/e2e/multi-window.spec.ts` asserting that two windows on different projects keep independent PTY sessions, buffers, and tab state (FR-101)
 - [X] T167 [P] Verify and update `CLAUDE.md` agent context with the final tech stack after all phases are merged
 - [X] T168 Ran `cargo audit` (0 vulnerabilities, 22 transitive unmaintained/soundness warnings via Tauri/wry/gtk-rs) and `pnpm audit --prod` (0 vulnerabilities); findings + resolution recorded in `specs/001-speclens-desktop/audit-notes.md`
-- [ ] T169 Final manual review of every FR in `spec.md` → mapped task → passing test, recorded in `specs/001-speclens-desktop/checklists/requirements.md` Notes section
+- [X] T169 Final FR → task → test traceability matrix recorded in `specs/001-speclens-desktop/checklists/requirements.md` Notes section: 56 FRs total, 48 covered by passing unit/integration/bench tests, 8 with explicit deferred-e2e-gate annotations (FR-080/081/082/083/085/093/101/103), zero unimplemented
 
 ---
 
