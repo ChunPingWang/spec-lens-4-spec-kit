@@ -8,6 +8,7 @@ pub mod agent_detector;
 pub mod app_data_store;
 pub mod doc_hash_store;
 pub mod fs_watcher;
+pub mod gitignore_hint;
 pub mod highlight_rules;
 pub mod notification_dispatcher;
 pub mod output_buffer;
