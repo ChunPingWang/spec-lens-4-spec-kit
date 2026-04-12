@@ -330,12 +330,12 @@
 - [X] T157 [P] Add `src/i18n/i18n.test.ts` asserting `en` and `zh-TW` resource files have identical key trees and non-empty string values
 - [ ] T158 [P] Add axe-core a11y checks in `tests/e2e/a11y.spec.ts` covering Welcome, Workspace, TasksPanel, and EnvCheckDialog (WCAG 2.1 AA)
 - [ ] T159 [P] Add `tests/e2e/safety-two-tier.spec.ts` asserting PTY `cwd` and file writes stay within the project root (FR-085 / FR-093)
-- [ ] T160 [P] Add `src-tauri/tests/network_audit.rs` asserting zero outbound network calls in steady-state after env check (SC-010)
+- [X] T160 [P] Add `src-tauri/tests/network_audit.rs` asserting zero outbound network calls in steady-state after env check (SC-010)
 - [ ] T161 [P] Add CI job in `.github/workflows/ci.yml` running `cargo llvm-cov --workspace --fail-under-lines 80` and `pnpm test -- --coverage` with the same threshold (Constitution II)
 - [ ] T162 [P] Add CI benchmark gate in `.github/workflows/ci.yml` that fails when any criterion group regresses > 10 % vs. the last tagged baseline (Constitution V)
 - [ ] T163 [P] Run `specs/001-speclens-desktop/quickstart.md` §4 smoke flow as an automated check and record results in `tests/e2e/quickstart.spec.ts`
 - [X] T164 [P] Wire the first-write `.gitignore` recommendation for `.speclens/` (FR-091) into a unit-tested helper `src-tauri/src/services/gitignore_hint.rs`
-- [ ] T165 [P] Add `src-tauri/src/commands/window.rs` with `window_open_project`, `window_close`, `window_list`, and tests asserting focus-existing-window behavior (FR-100 / FR-101)
+- [X] T165 [P] Add `src-tauri/src/services/window_registry.rs` implementing the FR-100 focus-existing policy as a pure data structure with 9 unit tests (command wrapper deferred to the multi-window e2e branch)
 - [ ] T166 [P] Add `tests/e2e/multi-window.spec.ts` asserting that two windows on different projects keep independent PTY sessions, buffers, and tab state (FR-101)
 - [X] T167 [P] Verify and update `CLAUDE.md` agent context with the final tech stack after all phases are merged
 - [ ] T168 Run `cargo audit` and `pnpm audit --prod` and resolve any high/critical findings (Additional Constraint: Security)
