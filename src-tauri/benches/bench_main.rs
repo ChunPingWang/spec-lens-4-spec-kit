@@ -7,14 +7,18 @@
 //!     per line on the reference corpus.
 //!   * `doc_hash_store::compute_sha256_hex` — FR-085 document hash recompute,
 //!     ≤ 5 ms on a 1 MiB file.
+//!   * `tasks_parser::parse` — FR-052 task parsing, ≤ 5 ms on a 1 000-line
+//!     Markdown checklist (T108).
 
+use std::fmt::Write as _FmtWrite;
 use std::io::Write as _;
 
 use chrono::Utc;
 use criterion::{black_box, criterion_group, criterion_main, Criterion, Throughput};
-use speclens_lib::models::{AppConfig, RecentProject};
+use speclens_lib::models::{AppConfig, RecentProject, TaskFileFormat};
 use speclens_lib::services::doc_hash_store::compute_sha256_hex;
 use speclens_lib::services::highlight_rules::{default_compiled, first_match};
+use speclens_lib::services::tasks_parser::parse as parse_tasks;
 use tempfile::tempdir;
 use uuid::Uuid;
 
@@ -92,10 +96,55 @@ fn bench_doc_hash_recompute(c: &mut Criterion) {
     group.finish();
 }
 
+/// Generate a 1 000-line Markdown task file mixing checkboxes, section
+/// headings, and noise lines so the parser exercises every branch.
+fn synth_markdown_1k() -> String {
+    let mut out = String::with_capacity(64 * 1024);
+    out.push_str("# Feature Tasks\n\n");
+    let marks = [' ', 'x', '~', 'X', '-'];
+    for i in 0..1000 {
+        if i % 100 == 0 {
+            let _ = writeln!(out, "\n## Phase {} — group {}\n", i / 100 + 1, i / 100);
+        }
+        if i % 37 == 0 {
+            let _ = writeln!(out, "Plain note line {i}, ignored by parser.");
+        }
+        let mark = marks[i % marks.len()];
+        let _ = writeln!(
+            out,
+            "- [{mark}] T{:03} [P] Task number {i} covering services/mod_{}.rs",
+            i + 1,
+            i % 17
+        );
+    }
+    out
+}
+
+fn bench_tasks_parser(c: &mut Criterion) {
+    let corpus = synth_markdown_1k();
+    let line_count = corpus.lines().count() as u64;
+    let mut group = c.benchmark_group("tasks_parser");
+    group.throughput(Throughput::Elements(line_count));
+    group.bench_function("parse/md/1k-lines", |b| {
+        b.iter(|| {
+            let (file, entries) = parse_tasks(
+                black_box("specs/001/tasks.md"),
+                TaskFileFormat::Md,
+                black_box(&corpus),
+            )
+            .expect("parse ok");
+            black_box(file.task_count);
+            black_box(entries.len());
+        });
+    });
+    group.finish();
+}
+
 criterion_group!(
     benches,
     bench_touch_recent,
     bench_highlight_rules,
-    bench_doc_hash_recompute
+    bench_doc_hash_recompute,
+    bench_tasks_parser
 );
 criterion_main!(benches);

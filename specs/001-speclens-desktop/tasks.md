@@ -182,7 +182,7 @@
 - [ ] T085 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_write.rs` asserting echo round-trip via `pty_output` event
 - [ ] T086 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_get_slice.rs` asserting transparent read across in-memory and on-disk tiers for a session that overflowed the buffer (FR-047)
 - [ ] T087 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_search.rs` asserting regex and plain search across both tiers
-- [ ] T088 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_set_config.rs` asserting `bufferMaxLines ∈ [1_000, 200_000]` and `diskCapMiB ∈ [16, 8192]` validation (FR-048)
+- [X] T088 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_set_config.rs` asserting `bufferMaxLines ∈ [1_000, 200_000]` and `diskCapMiB ∈ [16, 8192]` validation (FR-048)
 - [ ] T089 [P] [US3] Criterion bench `src-tauri/benches/bench_main.rs::terminal_buffer_slice` asserting ≤ 1 ms per 1 000-line slice retrieval
 - [ ] T090 [P] [US3] Vitest `src/components/terminal/TerminalPanel.test.tsx` asserting xterm mount, auto-scroll lock, and line-timestamp rendering
 - [ ] T091 [P] [US3] Playwright `tests/e2e/terminal-stream.spec.ts` asserting `echo` round-trip latency under 100 ms at p95
@@ -218,7 +218,7 @@
 - [ ] T105 [P] [US4] Contract test `src-tauri/tests/cmd_tasks_scan_files.rs` against a fixture with 0, 1, and many task files
 - [ ] T106 [P] [US4] Contract test `src-tauri/tests/cmd_tasks_parse_file.rs` covering `E_TASK_PARSE_FAILED` with actionable `hint`
 - [ ] T107 [P] [US4] Contract test `src-tauri/tests/cmd_tasks_state_set_selected.rs` asserting rejection when `activePath` not in `selectedPaths`
-- [ ] T108 [P] [US4] Criterion bench `src-tauri/benches/bench_main.rs::tasks_parser` targeting ≤ 5 ms per 1 000-line task file
+- [X] T108 [P] [US4] Criterion bench `src-tauri/benches/bench_main.rs::tasks_parser` targeting ≤ 5 ms per 1 000-line task file
 - [ ] T109 [P] [US4] Vitest `src/components/tasks/TaskFileBar.test.tsx` asserting the 0 / 1 / many tab rendering rules (FR-053)
 - [ ] T110 [P] [US4] Vitest `src/components/tasks/TaskFilePicker.test.tsx` asserting no items are pre-checked and the confirm button is disabled until ≥ 1 selection (FR-050)
 - [ ] T111 [P] [US4] Vitest `src/components/tasks/TasksProgressPanel.test.tsx` asserting the amber / blue / green color thresholds and combined + per-file bars (FR-055)
