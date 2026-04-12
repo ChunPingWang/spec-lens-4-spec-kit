@@ -27,17 +27,17 @@
 
 **Purpose**: Bring up the Tauri v2 monorepo so every subsequent task has a working build, lint, and test loop.
 
-- [ ] T001 Create the Tauri v2 monorepo skeleton at the repository root with `src/`, `src-tauri/`, `tests/`, `public/` directories per `plan.md` Project Structure
-- [ ] T002 [P] Initialize `package.json` with React 18, Vite, Tailwind, shadcn/ui, @xterm/xterm v5, @tanstack/react-virtual, Zustand, i18next, react-i18next, marked, highlight.js, lucide-react, Vitest, React Testing Library, Playwright, and TypeScript 5.4 dev deps; commit as `package.json` at repo root
-- [ ] T003 [P] Initialize `src-tauri/Cargo.toml` with Tauri v2 (`tauri`, `tauri-plugin-fs`, `tauri-plugin-shell`, `tauri-plugin-notification`, `tauri-plugin-store`), `tokio`, `serde`, `serde_json`, `serde_yaml`, `reqwest`, `portable-pty`, `notify`, `sha2`, `hex`, `semver`, `chrono`, `tracing`, `tracing-subscriber`, `thiserror`, `anyhow`, plus dev deps `pretty_assertions`, `insta`, `criterion`
-- [ ] T004 [P] Create `src-tauri/tauri.conf.json` with macOS / Windows / Linux bundle identifiers, window defaults, and CSP matching `plan.md`
-- [ ] T005 [P] Create `vite.config.ts`, `tsconfig.json`, `tailwind.config.ts`, `postcss.config.js`, and `.eslintrc.cjs` with strict TypeScript, React, and a11y plugins
-- [ ] T006 [P] Create `src-tauri/rustfmt.toml` and `src-tauri/clippy.toml` enforcing `-D warnings` per Constitution I
-- [ ] T007 [P] Create `.github/workflows/ci.yml` running `cargo fmt --check`, `cargo clippy -D warnings`, `cargo test`, `cargo bench -- --test`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e` on macOS / Windows / Ubuntu matrix
-- [ ] T008 [P] Create `.github/workflows/build.yml` triggering on version tags, running `pnpm tauri build` on the three OSes with artifact upload
-- [ ] T009 [P] Create `src-tauri/src/main.rs` and `src-tauri/src/lib.rs` bootstrap that registers an empty Tauri builder; runs `pnpm tauri dev` to a blank window
-- [ ] T010 [P] Create `src/main.tsx`, `src/App.tsx`, and `src/index.css` rendering a placeholder "SpecLens" page styled with Tailwind tokens
-- [ ] T011 [P] Create `tests/fixtures/README.md` and the four sample fixtures used throughout the task list: `tests/fixtures/speckit-project-ok/`, `tests/fixtures/speckit-project-empty/`, `tests/fixtures/speckit-project-broken/`, `tests/fixtures/task-files/` (md, json, yaml, txt samples)
+- [X] T001 Create the Tauri v2 monorepo skeleton at the repository root with `src/`, `src-tauri/`, `tests/`, `public/` directories per `plan.md` Project Structure
+- [X] T002 [P] Initialize `package.json` with React 18, Vite, Tailwind, shadcn/ui, @xterm/xterm v5, @tanstack/react-virtual, Zustand, i18next, react-i18next, marked, highlight.js, lucide-react, Vitest, React Testing Library, Playwright, and TypeScript 5.4 dev deps; commit as `package.json` at repo root
+- [X] T003 [P] Initialize `src-tauri/Cargo.toml` with Tauri v2 (`tauri`, `tauri-plugin-fs`, `tauri-plugin-shell`, `tauri-plugin-notification`, `tauri-plugin-store`), `tokio`, `serde`, `serde_json`, `serde_yaml`, `reqwest`, `portable-pty`, `notify`, `sha2`, `hex`, `semver`, `chrono`, `tracing`, `tracing-subscriber`, `thiserror`, `anyhow`, plus dev deps `pretty_assertions`, `insta`, `criterion`
+- [X] T004 [P] Create `src-tauri/tauri.conf.json` with macOS / Windows / Linux bundle identifiers, window defaults, and CSP matching `plan.md`
+- [X] T005 [P] Create `vite.config.ts`, `tsconfig.json`, `tailwind.config.ts`, `postcss.config.js`, and `.eslintrc.cjs` with strict TypeScript, React, and a11y plugins
+- [X] T006 [P] Create `src-tauri/rustfmt.toml` and `src-tauri/clippy.toml` enforcing `-D warnings` per Constitution I
+- [X] T007 [P] Create `.github/workflows/ci.yml` running `cargo fmt --check`, `cargo clippy -D warnings`, `cargo test`, `cargo bench -- --test`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e` on macOS / Windows / Ubuntu matrix
+- [X] T008 [P] Create `.github/workflows/build.yml` triggering on version tags, running `pnpm tauri build` on the three OSes with artifact upload
+- [X] T009 [P] Create `src-tauri/src/main.rs` and `src-tauri/src/lib.rs` bootstrap that registers an empty Tauri builder; runs `pnpm tauri dev` to a blank window
+- [X] T010 [P] Create `src/main.tsx`, `src/App.tsx`, and `src/index.css` rendering a placeholder "SpecLens" page styled with Tailwind tokens
+- [X] T011 [P] Create `tests/fixtures/README.md` and the four sample fixtures used throughout the task list: `tests/fixtures/speckit-project-ok/`, `tests/fixtures/speckit-project-empty/`, `tests/fixtures/speckit-project-broken/`, `tests/fixtures/task-files/` (md, json, yaml, txt samples)
 
 ---
 
@@ -49,47 +49,47 @@
 
 ### Shared Rust foundation
 
-- [ ] T012 Create `src-tauri/src/error.rs` defining `IpcError` via `thiserror` with the error codes from `contracts/ipc.md §Error Catalog` and a `Result<T>` alias
-- [ ] T013 [P] Create `src-tauri/src/models/mod.rs` and re-export empty stubs for every entity in `data-model.md` (AppConfig, RecentProject, WindowHandle, Project, EnvironmentStatus, AgentProfile, Step, PhaseDocument, DocHashRecord, TaskFile, TaskEntry, ProjectState, PtySession, OutputLine, HighlightRule, EnvIssue)
-- [ ] T014 [P] Write `src-tauri/src/models/app_config.rs` implementing `AppConfig`, `RecentProject`, `WindowHandle` with serde, validation ranges, and SemVer `schemaVersion = 1`
-- [ ] T015 [P] Write `src-tauri/src/models/project.rs`, `step.rs`, `phase_document.rs`, `doc_hash.rs` with serde round-trip and invariants from `data-model.md §Invariants`
-- [ ] T016 [P] Write `src-tauri/src/models/task_file.rs` and `task_entry.rs` with the status enum normalization specified in `data-model.md §11`
-- [ ] T017 [P] Write `src-tauri/src/models/pty.rs` defining `PtySession`, `OutputLine`, `AnsiSpan`, and `HighlightMatch`
-- [ ] T018 [P] Write `src-tauri/src/models/agent.rs` defining `AgentProfile` with the 12-agent enum + generic
-- [ ] T019 [P] Write `src-tauri/src/models/env.rs` defining `EnvironmentStatus`, `EnvIssue`, and the green/amber/red derivation helper
+- [X] T012 Create `src-tauri/src/error.rs` defining `IpcError` via `thiserror` with the error codes from `contracts/ipc.md §Error Catalog` and a `Result<T>` alias
+- [X] T013 [P] Create `src-tauri/src/models/mod.rs` and re-export empty stubs for every entity in `data-model.md` (AppConfig, RecentProject, WindowHandle, Project, EnvironmentStatus, AgentProfile, Step, PhaseDocument, DocHashRecord, TaskFile, TaskEntry, ProjectState, PtySession, OutputLine, HighlightRule, EnvIssue)
+- [X] T014 [P] Write `src-tauri/src/models/app_config.rs` implementing `AppConfig`, `RecentProject`, `WindowHandle` with serde, validation ranges, and SemVer `schemaVersion = 1`
+- [X] T015 [P] Write `src-tauri/src/models/project.rs`, `step.rs`, `phase_document.rs`, `doc_hash.rs` with serde round-trip and invariants from `data-model.md §Invariants`
+- [X] T016 [P] Write `src-tauri/src/models/task_file.rs` and `task_entry.rs` with the status enum normalization specified in `data-model.md §11`
+- [X] T017 [P] Write `src-tauri/src/models/pty.rs` defining `PtySession`, `OutputLine`, `AnsiSpan`, and `HighlightMatch`
+- [X] T018 [P] Write `src-tauri/src/models/agent.rs` defining `AgentProfile` with the 12-agent enum + generic
+- [X] T019 [P] Write `src-tauri/src/models/env.rs` defining `EnvironmentStatus`, `EnvIssue`, and the green/amber/red derivation helper
 
 ### Shared persistence layer
 
-- [ ] T020 Write failing Rust test `src-tauri/src/services/app_data_store.rs` `#[cfg(test)] mod tests` asserting round-trip read/write of `AppConfig` via `tauri-plugin-store` under a temp dir (env override `SPECLENS_APP_DATA_DIR`)
-- [ ] T021 Implement `src-tauri/src/services/app_data_store.rs` to make T020 pass, including LRU ordering for `recentProjects` and `schemaVersion` migration stub
-- [ ] T022 Write failing Rust test `src-tauri/src/services/state_store.rs` asserting round-trip of `ProjectState` under a per-project `.speclens/state.json`
-- [ ] T023 Implement `src-tauri/src/services/state_store.rs` to make T022 pass, including default fallbacks when `.speclens/` is missing or unreadable (FR-092)
-- [ ] T024 [P] Write failing Rust test `src-tauri/src/services/fs_watcher.rs` asserting a debounced event is emitted when a file in a fixture project is touched
-- [ ] T025 Implement `src-tauri/src/services/fs_watcher.rs` wrapping `notify` + `debouncer-full` to make T024 pass
+- [X] T020 Write failing Rust test `src-tauri/src/services/app_data_store.rs` `#[cfg(test)] mod tests` asserting round-trip read/write of `AppConfig` via `tauri-plugin-store` under a temp dir (env override `SPECLENS_APP_DATA_DIR`)
+- [X] T021 Implement `src-tauri/src/services/app_data_store.rs` to make T020 pass, including LRU ordering for `recentProjects` and `schemaVersion` migration stub
+- [X] T022 Write failing Rust test `src-tauri/src/services/state_store.rs` asserting round-trip of `ProjectState` under a per-project `.speclens/state.json`
+- [X] T023 Implement `src-tauri/src/services/state_store.rs` to make T022 pass, including default fallbacks when `.speclens/` is missing or unreadable (FR-092)
+- [X] T024 [P] Write failing Rust test `src-tauri/src/services/fs_watcher.rs` asserting a debounced event is emitted when a file in a fixture project is touched
+- [X] T025 Implement `src-tauri/src/services/fs_watcher.rs` wrapping `notify` + `debouncer-full` to make T024 pass
 
 ### IPC scaffolding
 
-- [ ] T026 Create `src-tauri/src/commands/mod.rs` and empty modules `project.rs`, `speckit.rs`, `terminal.rs`, `phase.rs`, `tasks.rs`, `agent.rs`, `config.rs`, each exposing an empty `pub fn register(app: &mut tauri::App)` helper
-- [ ] T027 Wire `src-tauri/src/lib.rs` to register all command modules and install the Tauri store plugin, FS watcher singleton, and tracing subscriber with env filter `SPECLENS_LOG`
+- [X] T026 Create `src-tauri/src/commands/mod.rs` and empty modules `project.rs`, `speckit.rs`, `terminal.rs`, `phase.rs`, `tasks.rs`, `agent.rs`, `config.rs`, each exposing an empty `pub fn register(app: &mut tauri::App)` helper
+- [X] T027 Wire `src-tauri/src/lib.rs` to register all command modules and install the Tauri store plugin, FS watcher singleton, and tracing subscriber with env filter `SPECLENS_LOG`
 
 ### Shared frontend foundation
 
-- [ ] T028 [P] Create `src/lib/tauri.ts` that wraps `invoke<T>` and `listen<T>` with typed command / event names from `contracts/ipc.md`
-- [ ] T029 [P] Create `src/types/ipc.ts` with TypeScript type mirrors of every Rust serde model in `data-model.md`
-- [ ] T030 [P] Create `src/i18n/index.ts` initializing i18next with `en` and `zh-TW` resources, OS locale detection, and a Zustand-friendly language setter (FR-087 / FR-088)
-- [ ] T031 [P] Seed `src/i18n/en.json` and `src/i18n/zh-TW.json` with the minimal keys needed by the Welcome page and the error toast system
-- [ ] T032 [P] Create `src/stores/configStore.ts` (Zustand) mirroring `AppConfig` and subscribing to the `app_config_changed` IPC event
-- [ ] T033 [P] Create `src/stores/projectStore.ts`, `src/stores/stepsStore.ts`, `src/stores/phaseStore.ts`, `src/stores/tasksStore.ts`, `src/stores/terminalStore.ts`, `src/stores/agentStore.ts`, each exporting empty slice factories
-- [ ] T034 [P] Create `src/components/layout/AppShell.tsx`, `TopBar.tsx`, `ResizablePanel.tsx` using shadcn/ui primitives; enforce keyboard navigation and WCAG 2.1 AA contrast tokens
-- [ ] T035 [P] Create `src/components/ui/ErrorToast.tsx` rendering the Constitution IV error format "what happened / why / what to do next" from an `IpcError` payload
-- [ ] T036 [P] Create `src/lib/highlightRules.ts` loading the bundled default rule set (a static JSON at `src/lib/default-highlight-rules.json`) exported for both frontend preview and Rust loader
+- [X] T028 [P] Create `src/lib/tauri.ts` that wraps `invoke<T>` and `listen<T>` with typed command / event names from `contracts/ipc.md`
+- [X] T029 [P] Create `src/types/ipc.ts` with TypeScript type mirrors of every Rust serde model in `data-model.md`
+- [X] T030 [P] Create `src/i18n/index.ts` initializing i18next with `en` and `zh-TW` resources, OS locale detection, and a Zustand-friendly language setter (FR-087 / FR-088)
+- [X] T031 [P] Seed `src/i18n/en.json` and `src/i18n/zh-TW.json` with the minimal keys needed by the Welcome page and the error toast system
+- [X] T032 [P] Create `src/stores/configStore.ts` (Zustand) mirroring `AppConfig` and subscribing to the `app_config_changed` IPC event
+- [X] T033 [P] Create `src/stores/projectStore.ts`, `src/stores/stepsStore.ts`, `src/stores/phaseStore.ts`, `src/stores/tasksStore.ts`, `src/stores/terminalStore.ts`, `src/stores/agentStore.ts`, each exporting empty slice factories
+- [X] T034 [P] Create `src/components/layout/AppShell.tsx`, `TopBar.tsx`, `ResizablePanel.tsx` using shadcn/ui primitives; enforce keyboard navigation and WCAG 2.1 AA contrast tokens
+- [X] T035 [P] Create `src/components/ui/ErrorToast.tsx` rendering the Constitution IV error format "what happened / why / what to do next" from an `IpcError` payload
+- [X] T036 [P] Create `src/lib/highlightRules.ts` loading the bundled default rule set (a static JSON at `src/lib/default-highlight-rules.json`) exported for both frontend preview and Rust loader
 
 ### Shared test plumbing
 
-- [ ] T037 [P] Create `vitest.config.ts` and `src/test/setup.ts` initializing `@testing-library/jest-dom` and a mock Tauri `invoke` / `listen` bridge
-- [ ] T038 [P] Create `playwright.config.ts` with a `tauri-driver` project targeting the dev binary and a fixture path override for the three sample projects
-- [ ] T039 [P] Create `src-tauri/tests/common/mod.rs` exposing helpers: `fixture_project(name) -> TempDir`, `with_app_data_dir(|dir| …)`, `touch(path)`
-- [ ] T040 [P] Create `src-tauri/benches/bench_main.rs` criterion harness with empty group stubs for `terminal_buffer_slice`, `tasks_parser`, `highlight_rules`, `doc_hash_recompute`
+- [X] T037 [P] Create `vitest.config.ts` and `src/test/setup.ts` initializing `@testing-library/jest-dom` and a mock Tauri `invoke` / `listen` bridge
+- [X] T038 [P] Create `playwright.config.ts` with a `tauri-driver` project targeting the dev binary and a fixture path override for the three sample projects
+- [X] T039 [P] Create `src-tauri/tests/common/mod.rs` exposing helpers: `fixture_project(name) -> TempDir`, `with_app_data_dir(|dir| …)`, `touch(path)`
+- [X] T040 [P] Create `src-tauri/benches/bench_main.rs` criterion harness with empty group stubs for `terminal_buffer_slice`, `tasks_parser`, `highlight_rules`, `doc_hash_recompute`
 
 **Checkpoint**: Foundation ready. User story phases can now begin in parallel by different developers.
 
@@ -103,31 +103,31 @@
 
 ### Tests for User Story 1 ⚠️ (write first, ensure FAILING)
 
-- [ ] T041 [P] [US1] Contract test `src-tauri/tests/cmd_project_pick_directory.rs` asserting `project_pick_directory` returns `{ path: string } | null` and validates path existence
-- [ ] T042 [P] [US1] Contract test `src-tauri/tests/cmd_project_open.rs` covering `E_PATH_NOT_FOUND`, `E_PATH_NOT_DIR`, `E_PATH_NOT_READABLE`, and the happy path returning `{ project, state }` against `tests/fixtures/speckit-project-ok`
-- [ ] T043 [P] [US1] Contract test `src-tauri/tests/cmd_project_recent.rs` covering `project_list_recent` LRU order, `project_pin_recent` pinning, and `project_remove_recent`
-- [ ] T044 [P] [US1] Contract test `src-tauri/tests/cmd_project_close.rs` asserting `.speclens/state.json` is flushed and the FS watcher is released on close
-- [ ] T045 [P] [US1] Contract test `src-tauri/tests/cmd_steps_list.rs` asserting the canonical Spec-Kit step list is returned for a fixture project with `pending`, `in_progress`, and `done` steps
-- [ ] T046 [P] [US1] Rust unit test `src-tauri/src/services/phase_scanner.rs::tests` asserting `Step.status` transitions from `not_started → in_progress → done → modified → missing` per `data-model.md §7`
-- [ ] T047 [P] [US1] Vitest `src/pages/Welcome.test.tsx` asserting the recent-projects list renders with empty state, with items, and handles click-to-open
-- [ ] T048 [P] [US1] Vitest `src/components/steps/StepsList.test.tsx` asserting rendering of the six step states with distinct status dot classes
-- [ ] T049 [P] [US1] Vitest `src/components/steps/ProgressBar.test.tsx` asserting `X / Y steps completed` label and percentage calculation
-- [ ] T050 [P] [US1] Playwright `tests/e2e/open-project.spec.ts` covering: Welcome → pick fixture → workspace renders with steps + progress within 3 s → close → reopen restores last step
+- [X] T041 [P] [US1] Contract test `src-tauri/tests/cmd_project_pick_directory.rs` asserting `project_pick_directory` returns `{ path: string } | null` and validates path existence
+- [X] T042 [P] [US1] Contract test `src-tauri/tests/cmd_project_open.rs` covering `E_PATH_NOT_FOUND`, `E_PATH_NOT_DIR`, `E_PATH_NOT_READABLE`, and the happy path returning `{ project, state }` against `tests/fixtures/speckit-project-ok`
+- [X] T043 [P] [US1] Contract test `src-tauri/tests/cmd_project_recent.rs` covering `project_list_recent` LRU order, `project_pin_recent` pinning, and `project_remove_recent`
+- [X] T044 [P] [US1] Contract test `src-tauri/tests/cmd_project_close.rs` asserting `.speclens/state.json` is flushed and the FS watcher is released on close
+- [X] T045 [P] [US1] Contract test `src-tauri/tests/cmd_steps_list.rs` asserting the canonical Spec-Kit step list is returned for a fixture project with `pending`, `in_progress`, and `done` steps
+- [X] T046 [P] [US1] Rust unit test `src-tauri/src/services/phase_scanner.rs::tests` asserting `Step.status` transitions from `not_started → in_progress → done → modified → missing` per `data-model.md §7`
+- [X] T047 [P] [US1] Vitest `src/pages/Welcome.test.tsx` asserting the recent-projects list renders with empty state, with items, and handles click-to-open
+- [X] T048 [P] [US1] Vitest `src/components/steps/StepsList.test.tsx` asserting rendering of the six step states with distinct status dot classes
+- [X] T049 [P] [US1] Vitest `src/components/steps/ProgressBar.test.tsx` asserting `X / Y steps completed` label and percentage calculation
+- [X] T050 [P] [US1] Playwright `tests/e2e/open-project.spec.ts` covering: Welcome → pick fixture → workspace renders with steps + progress within 3 s → close → reopen restores last step
 
 ### Implementation for User Story 1
 
-- [ ] T051 [US1] Implement `src-tauri/src/services/phase_scanner.rs` to read `.specify/` and `specs/` layouts and produce an ordered `Vec<Step>` with status derived purely from FS observations
-- [ ] T052 [US1] Implement `src-tauri/src/commands/project.rs::project_pick_directory` using `tauri-plugin-dialog`
-- [ ] T053 [US1] Implement `src-tauri/src/commands/project.rs::project_open` — canonicalize path, validate, register FS watcher scope, upsert `RecentProject`, load `ProjectState`, emit `project_opened`
-- [ ] T054 [US1] Implement `project_list_recent`, `project_remove_recent`, `project_pin_recent` in `src-tauri/src/commands/project.rs` backed by `app_data_store`
-- [ ] T055 [US1] Implement `project_close` in `src-tauri/src/commands/project.rs` flushing `ProjectState` and tearing down FS + PTY resources for the window
-- [ ] T056 [US1] Implement `src-tauri/src/commands/speckit.rs::steps_list` and `steps_get` calling `phase_scanner` and returning serde models
-- [ ] T057 [P] [US1] Create `src/pages/Welcome.tsx` rendering the recent-projects list from `configStore`, a "Pick a project" button, and drag-and-drop handling routed through `project_pick_directory`
-- [ ] T058 [P] [US1] Create `src/pages/Workspace.tsx` as the per-window shell that dispatches `project_open` on mount and listens to `project_opened`
-- [ ] T059 [P] [US1] Create `src/components/steps/StepsList.tsx`, `StepItem.tsx`, `ProgressBar.tsx` consuming `stepsStore` with `@tanstack/react-virtual`
-- [ ] T060 [P] [US1] Create `src/hooks/useSpeckitEvents.ts` subscribing to `steps_state_changed`, `project_opened`, `project_state_changed` and pushing updates into the relevant Zustand stores
-- [ ] T061 [US1] Wire the `TopBar` to show project name, path, last-modified time, and placeholder agent badge (real data lands in US6) per FR-005
-- [ ] T062 [US1] Persist last selected step to `ProjectState.lastStepId` via `tasks_state_set_selected`'s sibling helper in `state_store`; restore on project open
+- [X] T051 [US1] Implement `src-tauri/src/services/phase_scanner.rs` to read `.specify/` and `specs/` layouts and produce an ordered `Vec<Step>` with status derived purely from FS observations
+- [X] T052 [US1] Implement `src-tauri/src/commands/project.rs::project_pick_directory` using `tauri-plugin-dialog`
+- [X] T053 [US1] Implement `src-tauri/src/commands/project.rs::project_open` — canonicalize path, validate, register FS watcher scope, upsert `RecentProject`, load `ProjectState`, emit `project_opened`
+- [X] T054 [US1] Implement `project_list_recent`, `project_remove_recent`, `project_pin_recent` in `src-tauri/src/commands/project.rs` backed by `app_data_store`
+- [X] T055 [US1] Implement `project_close` in `src-tauri/src/commands/project.rs` flushing `ProjectState` and tearing down FS + PTY resources for the window
+- [X] T056 [US1] Implement `src-tauri/src/commands/speckit.rs::steps_list` and `steps_get` calling `phase_scanner` and returning serde models
+- [X] T057 [P] [US1] Create `src/pages/Welcome.tsx` rendering the recent-projects list from `configStore`, a "Pick a project" button, and drag-and-drop handling routed through `project_pick_directory`
+- [X] T058 [P] [US1] Create `src/pages/Workspace.tsx` as the per-window shell that dispatches `project_open` on mount and listens to `project_opened`
+- [X] T059 [P] [US1] Create `src/components/steps/StepsList.tsx`, `StepItem.tsx`, `ProgressBar.tsx` consuming `stepsStore` with `@tanstack/react-virtual`
+- [X] T060 [P] [US1] Create `src/hooks/useSpeckitEvents.ts` subscribing to `steps_state_changed`, `project_opened`, `project_state_changed` and pushing updates into the relevant Zustand stores
+- [X] T061 [US1] Wire the `TopBar` to show project name, path, last-modified time, and placeholder agent badge (real data lands in US6) per FR-005
+- [X] T062 [US1] Persist last selected step to `ProjectState.lastStepId` via `tasks_state_set_selected`'s sibling helper in `state_store`; restore on project open
 
 **Checkpoint**: At this point US1 is independently demo-able — a user can open a project and see accurate progress, and recent projects / last step persist across relaunches.
 
@@ -141,28 +141,28 @@
 
 ### Tests for User Story 2 ⚠️ (write first, ensure FAILING)
 
-- [ ] T063 [P] [US2] Contract test `src-tauri/tests/cmd_phase_get_overview.rs` asserting slice extraction for a fixture `plan.md`
-- [ ] T064 [P] [US2] Contract test `src-tauri/tests/cmd_phase_get_documents.rs` covering the four `DocStatus` values
-- [ ] T065 [P] [US2] Contract test `src-tauri/tests/cmd_phase_read_document.rs` covering happy path and `E_DOC_TOO_LARGE` truncation boundary
-- [ ] T066 [P] [US2] Contract test `src-tauri/tests/cmd_phase_recompute_hashes.rs` asserting that editing a fixture doc flips its status from `generated` to `modified`
-- [ ] T067 [P] [US2] Rust unit test `src-tauri/src/services/doc_hash_store.rs::tests` asserting SHA-256 hex length 64, atomic write, and 30-day GC for stale records
-- [ ] T068 [P] [US2] Vitest `src/components/phase/PhaseTabs.test.tsx` asserting the Tasks sub-page appears only for the `tasks` step (FR-030)
-- [ ] T069 [P] [US2] Vitest `src/components/phase/DocumentItem.test.tsx` asserting each badge state renders with the correct a11y label and tooltip text
-- [ ] T070 [P] [US2] Vitest `src/components/phase/DocumentPreview.test.tsx` asserting Markdown, JSON pretty-print, and syntax-highlighted code branches
-- [ ] T071 [P] [US2] Playwright `tests/e2e/phase-drilldown.spec.ts` covering click-through from StepsList to DocumentPreview
+- [X] T063 [P] [US2] Contract test `src-tauri/tests/cmd_phase_get_overview.rs` asserting slice extraction for a fixture `plan.md`
+- [X] T064 [P] [US2] Contract test `src-tauri/tests/cmd_phase_get_documents.rs` covering the four `DocStatus` values
+- [X] T065 [P] [US2] Contract test `src-tauri/tests/cmd_phase_read_document.rs` covering happy path and `E_DOC_TOO_LARGE` truncation boundary
+- [X] T066 [P] [US2] Contract test `src-tauri/tests/cmd_phase_recompute_hashes.rs` asserting that editing a fixture doc flips its status from `generated` to `modified`
+- [X] T067 [P] [US2] Rust unit test `src-tauri/src/services/doc_hash_store.rs::tests` asserting SHA-256 hex length 64, atomic write, and 30-day GC for stale records
+- [X] T068 [P] [US2] Vitest `src/components/phase/PhaseTabs.test.tsx` asserting the Tasks sub-page appears only for the `tasks` step (FR-030)
+- [X] T069 [P] [US2] Vitest `src/components/phase/DocumentItem.test.tsx` asserting each badge state renders with the correct a11y label and tooltip text
+- [X] T070 [P] [US2] Vitest `src/components/phase/DocumentPreview.test.tsx` asserting Markdown, JSON pretty-print, and syntax-highlighted code branches
+- [X] T071 [P] [US2] Playwright `tests/e2e/phase-drilldown.spec.ts` covering click-through from StepsList to DocumentPreview
 
 ### Implementation for User Story 2
 
-- [ ] T072 [US2] Implement `src-tauri/src/services/doc_hash_store.rs` reading/writing `.speclens/doc-hashes.json` with SHA-256 + `chrono` timestamps
-- [ ] T073 [US2] Extend `src-tauri/src/services/phase_scanner.rs` to compute `PhaseDocument[]` per step with the four `DocStatus` values and hook the FS watcher to emit `phase_documents_changed`
-- [ ] T074 [US2] Implement `src-tauri/src/commands/phase.rs::phase_get_overview` producing `PhaseOverviewSlice[]` from document headings
-- [ ] T075 [US2] Implement `phase_get_documents` and `phase_read_document` (with `maxBytes` truncation) in `src-tauri/src/commands/phase.rs`
-- [ ] T076 [US2] Implement `phase_recompute_hashes` in `src-tauri/src/commands/phase.rs` emitting `phase_documents_changed` on delta
-- [ ] T077 [P] [US2] Create `src/components/phase/PhaseTabs.tsx` and `PhaseTabPanel.tsx` with locked/unlocked tab behavior per FR-032
-- [ ] T078 [P] [US2] Create `src/components/phase/OverviewPanel.tsx` rendering step metadata and a collapsible terminal-slice placeholder (filled in US3)
-- [ ] T079 [P] [US2] Create `src/components/phase/DocumentList.tsx` and `DocumentItem.tsx` with badges (`generated`, `modified`, `missing`, `unverified`) sourced from `phaseStore`
-- [ ] T080 [P] [US2] Create `src/components/phase/DocumentPreview.tsx` using `marked` + `highlight.js` with lazy loading
-- [ ] T081 [US2] Wire `src/hooks/useSpeckitEvents.ts` to refresh `phaseStore` on `phase_documents_changed` and update step status on `steps_state_changed`
+- [X] T072 [US2] Implement `src-tauri/src/services/doc_hash_store.rs` reading/writing `.speclens/doc-hashes.json` with SHA-256 + `chrono` timestamps
+- [X] T073 [US2] Extend `src-tauri/src/services/phase_scanner.rs` to compute `PhaseDocument[]` per step with the four `DocStatus` values and hook the FS watcher to emit `phase_documents_changed`
+- [X] T074 [US2] Implement `src-tauri/src/commands/phase.rs::phase_get_overview` producing `PhaseOverviewSlice[]` from document headings
+- [X] T075 [US2] Implement `phase_get_documents` and `phase_read_document` (with `maxBytes` truncation) in `src-tauri/src/commands/phase.rs`
+- [X] T076 [US2] Implement `phase_recompute_hashes` in `src-tauri/src/commands/phase.rs` emitting `phase_documents_changed` on delta
+- [X] T077 [P] [US2] Create `src/components/phase/PhaseTabs.tsx` and `PhaseTabPanel.tsx` with locked/unlocked tab behavior per FR-032
+- [X] T078 [P] [US2] Create `src/components/phase/OverviewPanel.tsx` rendering step metadata and a collapsible terminal-slice placeholder (filled in US3)
+- [X] T079 [P] [US2] Create `src/components/phase/DocumentList.tsx` and `DocumentItem.tsx` with badges (`generated`, `modified`, `missing`, `unverified`) sourced from `phaseStore`
+- [X] T080 [P] [US2] Create `src/components/phase/DocumentPreview.tsx` using `marked` + `highlight.js` with lazy loading
+- [X] T081 [US2] Wire `src/hooks/useSpeckitEvents.ts` to refresh `phaseStore` on `phase_documents_changed` and update step status on `steps_state_changed`
 
 **Checkpoint**: US1 + US2 deliver the dashboard + drill-down experience end-to-end (minus live terminal and tasks, which follow).
 
@@ -176,29 +176,29 @@
 
 ### Tests for User Story 3 ⚠️ (write first, ensure FAILING)
 
-- [ ] T082 [P] [US3] Rust unit test `src-tauri/src/services/output_buffer.rs::tests` asserting ring-buffer eviction and spill-file append for `OutputLine[]`
-- [ ] T083 [P] [US3] Rust unit test `src-tauri/src/services/highlight_rules.rs::tests` using `insta` snapshots for each FR-045 rule (success, error, running, warning, JSON, file-path)
+- [X] T082 [P] [US3] Rust unit test `src-tauri/src/services/output_buffer.rs::tests` asserting ring-buffer eviction and spill-file append for `OutputLine[]`
+- [X] T083 [P] [US3] Rust unit test `src-tauri/src/services/highlight_rules.rs::tests` using `insta` snapshots for each FR-045 rule (success, error, running, warning, JSON, file-path)
 - [ ] T084 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_attach.rs` asserting `cwd` is locked to the project root (FR-085) and `E_PTY_SPAWN_FAILED` hint propagation
 - [ ] T085 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_write.rs` asserting echo round-trip via `pty_output` event
-- [ ] T086 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_get_slice.rs` asserting transparent read across in-memory and on-disk tiers for a session that overflowed the buffer (FR-047)
-- [ ] T087 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_search.rs` asserting regex and plain search across both tiers
+- [X] T086 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_get_slice.rs` asserting transparent read across in-memory and on-disk tiers for a session that overflowed the buffer (FR-047)
+- [X] T087 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_search.rs` asserting regex and plain search across both tiers
 - [X] T088 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_set_config.rs` asserting `bufferMaxLines ∈ [1_000, 200_000]` and `diskCapMiB ∈ [16, 8192]` validation (FR-048)
 - [X] T089 [P] [US3] Criterion bench `src-tauri/benches/bench_main.rs::output_buffer::slice/1k-of-10k` measuring 28 µs for a 1 000-line window over a 10 000-line in-memory buffer (~35× under the 1 ms budget)
-- [ ] T090 [P] [US3] Vitest `src/components/terminal/TerminalPanel.test.tsx` asserting xterm mount, auto-scroll lock, and line-timestamp rendering
+- [X] T090 [P] [US3] Vitest `src/components/terminal/TerminalPanel.test.tsx` asserting xterm mount, auto-scroll lock, and line-timestamp rendering
 - [ ] T091 [P] [US3] Playwright `tests/e2e/terminal-stream.spec.ts` asserting `echo` round-trip latency under 100 ms at p95
 
 ### Implementation for User Story 3
 
-- [ ] T092 [US3] Implement `src-tauri/src/services/output_buffer.rs` with an in-memory `VecDeque<OutputLine>` capped at `bufferMaxLines` and an append-only `.speclens/logs/<sessionId>.ndjson` spill writer
-- [ ] T093 [US3] Implement `src-tauri/src/services/highlight_rules.rs` loading a bundled JSON rule set, compiling regexes at load time, and applying the first matching rule per line
-- [ ] T094 [US3] Implement `src-tauri/src/services/terminal_bridge.rs` spawning `portable-pty`, reading stdout/stderr into `OutputLine`, batching emits every ~16 ms per FR-081, and enforcing the disk cap + `buffer_spilled` event
-- [ ] T095 [US3] Implement `src-tauri/src/commands/terminal.rs::terminal_attach`, `terminal_detach`, `terminal_write`, `terminal_resize` passing through to `terminal_bridge`
-- [ ] T096 [US3] Implement `terminal_get_slice`, `terminal_search`, `terminal_get_config`, `terminal_set_config` in `src-tauri/src/commands/terminal.rs`
-- [ ] T097 [US3] Wire `terminal_bridge` to route PTY output lines to the currently attached step based on regex rules and publish `steps_state_changed` when a line transitions a step
-- [ ] T098 [P] [US3] Create `src/components/terminal/TerminalPanel.tsx` wrapping `@xterm/xterm` with addon-fit, addon-search, addon-web-links, addon-unicode11 and consuming `terminalStore`
+- [X] T092 [US3] Implement `src-tauri/src/services/output_buffer.rs` with an in-memory `VecDeque<OutputLine>` capped at `bufferMaxLines` and an append-only `.speclens/logs/<sessionId>.ndjson` spill writer
+- [X] T093 [US3] Implement `src-tauri/src/services/highlight_rules.rs` loading a bundled JSON rule set, compiling regexes at load time, and applying the first matching rule per line
+- [X] T094 [US3] Implement `src-tauri/src/services/terminal_bridge.rs` spawning `portable-pty`, reading stdout/stderr into `OutputLine`, batching emits every ~16 ms per FR-081, and enforcing the disk cap + `buffer_spilled` event
+- [X] T095 [US3] Implement `src-tauri/src/commands/terminal.rs::terminal_attach`, `terminal_detach`, `terminal_write`, `terminal_resize` passing through to `terminal_bridge`
+- [X] T096 [US3] Implement `terminal_get_slice`, `terminal_search`, `terminal_get_config`, `terminal_set_config` in `src-tauri/src/commands/terminal.rs`
+- [X] T097 [US3] Wire `terminal_bridge` to route PTY output lines to the currently attached step based on regex rules and publish `steps_state_changed` when a line transitions a step
+- [X] T098 [P] [US3] Create `src/components/terminal/TerminalPanel.tsx` wrapping `@xterm/xterm` with addon-fit, addon-search, addon-web-links, addon-unicode11 and consuming `terminalStore`
 - [ ] T099 [P] [US3] Create `src/components/terminal/TerminalToolbar.tsx` (filters, regex search, clear view, export `.log`/`.txt`, copy, auto-scroll lock) per FR-042 / FR-043
 - [ ] T100 [P] [US3] Create `src/components/terminal/QuickCommands.tsx` behind the optional `allowTerminalForwarding` setting (FR-044); disabled by default
-- [ ] T101 [P] [US3] Create `src/hooks/usePtySession.ts` subscribing to `pty_output`, `pty_closed`, `buffer_spilled` and feeding the xterm instance
+- [X] T101 [P] [US3] Create `src/hooks/usePtySession.ts` subscribing to `pty_output`, `pty_closed`, `buffer_spilled` and feeding the xterm instance
 - [ ] T102 [US3] Integrate the terminal slice into `OverviewPanel.tsx` (from US2) using `terminal_get_slice` bounded by the step's run window (FR-033)
 
 **Checkpoint**: US1 + US2 + US3 deliver the core dashboard, drill-down, and live terminal.
@@ -213,31 +213,31 @@
 
 ### Tests for User Story 4 ⚠️ (write first, ensure FAILING)
 
-- [ ] T103 [P] [US4] Rust unit test `src-tauri/src/services/tasks_parser.rs::tests` using `insta` snapshots for `.md`, `.json`, `.yaml`, `.txt` fixtures in `tests/fixtures/task-files/`
-- [ ] T104 [P] [US4] Rust unit test `src-tauri/src/services/task_file_scanner.rs::tests` asserting scan returns candidates without auto-selecting any (FR-050)
-- [ ] T105 [P] [US4] Contract test `src-tauri/tests/cmd_tasks_scan_files.rs` against a fixture with 0, 1, and many task files
-- [ ] T106 [P] [US4] Contract test `src-tauri/tests/cmd_tasks_parse_file.rs` covering `E_TASK_PARSE_FAILED` with actionable `hint`
-- [ ] T107 [P] [US4] Contract test `src-tauri/tests/cmd_tasks_state_set_selected.rs` asserting rejection when `activePath` not in `selectedPaths`
+- [X] T103 [P] [US4] Rust unit test `src-tauri/src/services/tasks_parser.rs::tests` using `insta` snapshots for `.md`, `.json`, `.yaml`, `.txt` fixtures in `tests/fixtures/task-files/`
+- [X] T104 [P] [US4] Rust unit test `src-tauri/src/services/task_file_scanner.rs::tests` asserting scan returns candidates without auto-selecting any (FR-050)
+- [X] T105 [P] [US4] Contract test `src-tauri/tests/cmd_tasks_scan_files.rs` against a fixture with 0, 1, and many task files
+- [X] T106 [P] [US4] Contract test `src-tauri/tests/cmd_tasks_parse_file.rs` covering `E_TASK_PARSE_FAILED` with actionable `hint`
+- [X] T107 [P] [US4] Contract test `src-tauri/tests/cmd_tasks_state_set_selected.rs` asserting rejection when `activePath` not in `selectedPaths`
 - [X] T108 [P] [US4] Criterion bench `src-tauri/benches/bench_main.rs::tasks_parser` targeting ≤ 5 ms per 1 000-line task file
-- [ ] T109 [P] [US4] Vitest `src/components/tasks/TaskFileBar.test.tsx` asserting the 0 / 1 / many tab rendering rules (FR-053)
-- [ ] T110 [P] [US4] Vitest `src/components/tasks/TaskFilePicker.test.tsx` asserting no items are pre-checked and the confirm button is disabled until ≥ 1 selection (FR-050)
-- [ ] T111 [P] [US4] Vitest `src/components/tasks/TasksProgressPanel.test.tsx` asserting the amber / blue / green color thresholds and combined + per-file bars (FR-055)
-- [ ] T112 [P] [US4] Vitest `src/components/tasks/TaskItem.test.tsx` asserting expansion shows description, related docs, "≈ 30 s before completion" slice, and error summary
+- [X] T109 [P] [US4] Vitest `src/components/tasks/TaskFileBar.test.tsx` asserting the 0 / 1 / many tab rendering rules (FR-053)
+- [X] T110 [P] [US4] Vitest `src/components/tasks/TaskFilePicker.test.tsx` asserting no items are pre-checked and the confirm button is disabled until ≥ 1 selection (FR-050)
+- [X] T111 [P] [US4] Vitest `src/components/tasks/TasksProgressPanel.test.tsx` asserting the amber / blue / green color thresholds and combined + per-file bars (FR-055)
+- [X] T112 [P] [US4] Vitest `src/components/tasks/TaskItem.test.tsx` asserting expansion shows description, related docs, "≈ 30 s before completion" slice, and error summary
 - [ ] T113 [P] [US4] Playwright `tests/e2e/tasks-first-entry.spec.ts` covering: open project → tasks tab → picker → confirm → Task File Bar → add file → filter per tab
 
 ### Implementation for User Story 4
 
-- [ ] T114 [US4] Implement `src-tauri/src/services/tasks_parser.rs` with four parsers (md checkbox regex, JSON `{tasks:[]}`, YAML same shape, txt one-per-line) producing a common `TaskEntry`
-- [ ] T115 [US4] Implement `src-tauri/src/services/task_file_scanner.rs` walking the project with `ignore` crate heuristics, respecting `.gitignore`
-- [ ] T116 [US4] Implement `src-tauri/src/commands/tasks.rs::tasks_scan_files`, `tasks_parse_file`, `tasks_pick_file` (restricted OS dialog), `tasks_state_set_selected`
-- [ ] T117 [US4] Extend `state_store` to persist `selectedTaskFilePaths` and `activeTaskFilePath` per project and reload automatically (FR-052)
-- [ ] T118 [P] [US4] Create `src/components/tasks/TasksPanel.tsx` wiring the picker → file-bar → list flow
-- [ ] T119 [P] [US4] Create `src/components/tasks/TaskFilePicker.tsx` with scan results + manual "select path" + "select file" affordances, nothing pre-checked
-- [ ] T120 [P] [US4] Create `src/components/tasks/TaskFileBar.tsx` with always-visible rendering, parent-directory disambiguation, completion badge, close button, overflow arrows, "+ add file" control
-- [ ] T121 [P] [US4] Create `src/components/tasks/TaskFilter.tsx` (All / Completed / Incomplete chips, search box, sort incomplete-first) scoped per tab
-- [ ] T122 [P] [US4] Create `src/components/tasks/TaskItem.tsx` and `TaskDetail.tsx` with expandable detail, related-doc links that jump to US2's DocumentPreview, 30 s terminal slice via `terminal_get_slice`, error summary
-- [ ] T123 [P] [US4] Create `src/components/tasks/TasksProgressPanel.tsx` showing combined + per-file progress bars with the FR-055 color thresholds
-- [ ] T124 [US4] Wire `TasksPanel` into `PhaseTabPanel` for the `tasks` step only and emit the first-write `.gitignore` recommendation prompt per FR-091
+- [X] T114 [US4] Implement `src-tauri/src/services/tasks_parser.rs` with four parsers (md checkbox regex, JSON `{tasks:[]}`, YAML same shape, txt one-per-line) producing a common `TaskEntry`
+- [X] T115 [US4] Implement `src-tauri/src/services/task_file_scanner.rs` walking the project with `ignore` crate heuristics, respecting `.gitignore`
+- [X] T116 [US4] Implement `src-tauri/src/commands/tasks.rs::tasks_scan_files`, `tasks_parse_file`, `tasks_pick_file` (restricted OS dialog), `tasks_state_set_selected`
+- [X] T117 [US4] Extend `state_store` to persist `selectedTaskFilePaths` and `activeTaskFilePath` per project and reload automatically (FR-052)
+- [X] T118 [P] [US4] Create `src/components/tasks/TasksPanel.tsx` wiring the picker → file-bar → list flow
+- [X] T119 [P] [US4] Create `src/components/tasks/TaskFilePicker.tsx` with scan results + manual "select path" + "select file" affordances, nothing pre-checked
+- [X] T120 [P] [US4] Create `src/components/tasks/TaskFileBar.tsx` with always-visible rendering, parent-directory disambiguation, completion badge, close button, overflow arrows, "+ add file" control
+- [X] T121 [P] [US4] Create `src/components/tasks/TaskFilter.tsx` (All / Completed / Incomplete chips, search box, sort incomplete-first) scoped per tab
+- [X] T122 [P] [US4] Create `src/components/tasks/TaskItem.tsx` and `TaskDetail.tsx` with expandable detail, related-doc links that jump to US2's DocumentPreview, 30 s terminal slice via `terminal_get_slice`, error summary
+- [X] T123 [P] [US4] Create `src/components/tasks/TasksProgressPanel.tsx` showing combined + per-file progress bars with the FR-055 color thresholds
+- [X] T124 [US4] Wire `TasksPanel` into `PhaseTabPanel` for the `tasks` step only and emit the first-write `.gitignore` recommendation prompt per FR-091
 
 **Checkpoint**: All four P1 stories are independently demo-able; this is the product MVP.
 
@@ -251,19 +251,19 @@
 
 ### Tests for User Story 5 ⚠️ (write first, ensure FAILING)
 
-- [ ] T125 [P] [US5] Rust unit test `src-tauri/src/services/version_checker.rs::tests` asserting SemVer comparison, network-failure fallback (FR-013), and cached `latestKnownVersion`
-- [ ] T126 [P] [US5] Contract test `src-tauri/tests/cmd_env_check.rs` with three scenarios: not installed, outdated, current
-- [ ] T127 [P] [US5] Contract test `src-tauri/tests/cmd_env_get_install_guide.rs` asserting bundled payload per platform
-- [ ] T128 [P] [US5] Vitest `src/components/env/EnvCheckDialog.test.tsx` asserting green/amber/red rendering and actionable messages per Constitution IV
+- [X] T125 [P] [US5] Rust unit test `src-tauri/src/services/version_checker.rs::tests` asserting SemVer comparison, network-failure fallback (FR-013), and cached `latestKnownVersion`
+- [X] T126 [P] [US5] Contract test `src-tauri/tests/cmd_env_check.rs` with three scenarios: not installed, outdated, current
+- [X] T127 [P] [US5] Contract test `src-tauri/tests/cmd_env_get_install_guide.rs` asserting bundled payload per platform
+- [X] T128 [P] [US5] Vitest `src/components/env/EnvCheckDialog.test.tsx` asserting green/amber/red rendering and actionable messages per Constitution IV
 - [ ] T129 [P] [US5] Playwright `tests/e2e/env-check.spec.ts` covering the three scenarios end-to-end
 
 ### Implementation for User Story 5
 
-- [ ] T130 [US5] Implement `src-tauri/src/services/version_checker.rs` probing `spec-kit --version`, comparing against a cached manifest, and falling back gracefully offline
-- [ ] T131 [US5] Implement `src-tauri/src/commands/speckit.rs::env_check` and `env_get_install_guide` returning `EnvironmentStatus` and a static guide payload
-- [ ] T132 [P] [US5] Create `src/components/env/EnvCheckDialog.tsx` blocking modal with green/amber/red states and actionable messages
-- [ ] T133 [P] [US5] Create `src/components/env/InstallGuide.tsx` and `src/components/env/UpdateBanner.tsx` with "Update now" / "Skip" actions and progress indicator
-- [ ] T134 [US5] Wire `Workspace.tsx` to call `env_check` on mount, gate the main layout behind a successful result, and listen to `env_status_changed`
+- [X] T130 [US5] Implement `src-tauri/src/services/version_checker.rs` probing `spec-kit --version`, comparing against a cached manifest, and falling back gracefully offline
+- [X] T131 [US5] Implement `src-tauri/src/commands/speckit.rs::env_check` and `env_get_install_guide` returning `EnvironmentStatus` and a static guide payload
+- [X] T132 [P] [US5] Create `src/components/env/EnvCheckDialog.tsx` blocking modal with green/amber/red states and actionable messages
+- [X] T133 [P] [US5] Create `src/components/env/InstallGuide.tsx` and `src/components/env/UpdateBanner.tsx` with "Update now" / "Skip" actions and progress indicator
+- [X] T134 [US5] Wire `Workspace.tsx` to call `env_check` on mount, gate the main layout behind a successful result, and listen to `env_status_changed`
 
 **Checkpoint**: P2 env-check protects the P1 flows without blocking users who already have Spec-Kit installed.
 
@@ -277,19 +277,19 @@
 
 ### Tests for User Story 6 ⚠️ (write first, ensure FAILING)
 
-- [ ] T135 [P] [US6] Rust unit test `src-tauri/src/services/agent_detector.rs::tests` covering the three-step priority chain (FR-061) for all 12 agents plus generic fallback
-- [ ] T136 [P] [US6] Contract test `src-tauri/tests/cmd_agent_detect.rs` against the 13 fixture projects
-- [ ] T137 [P] [US6] Contract test `src-tauri/tests/cmd_agent_list_known.rs` asserting 12 + 1 profiles
-- [ ] T138 [P] [US6] Vitest `src/components/agent/AgentBadge.test.tsx` asserting correct icon, name, and label per detection source
+- [X] T135 [P] [US6] Rust unit test `src-tauri/src/services/agent_detector.rs::tests` covering the three-step priority chain (FR-061) for all 12 agents plus generic fallback
+- [X] T136 [P] [US6] Contract test `src-tauri/tests/cmd_agent_detect.rs` against the 13 fixture projects
+- [X] T137 [P] [US6] Contract test `src-tauri/tests/cmd_agent_list_known.rs` asserting 12 + 1 profiles
+- [X] T138 [P] [US6] Vitest `src/components/agent/AgentBadge.test.tsx` asserting correct icon, name, and label per detection source
 - [ ] T139 [P] [US6] Playwright `tests/e2e/agent-generic.spec.ts` asserting that every feature remains available in a `generic` project
 
 ### Implementation for User Story 6
 
-- [ ] T140 [US6] Create `tests/fixtures/agent-*` fixture projects covering Claude Code, Copilot, Gemini CLI, Cursor, Windsurf, Amazon Q, Codex CLI, Qwen Code, opencode, Kilo Code, Auggie CLI, Roo Code, and a generic-only project
-- [ ] T141 [US6] Implement `src-tauri/src/services/agent_detector.rs` with the priority chain (config → fingerprint → generic) returning `AgentProfile`
-- [ ] T142 [US6] Implement `src-tauri/src/commands/agent.rs::agent_detect` and `agent_list_known`
-- [ ] T143 [P] [US6] Create `src/components/agent/AgentBadge.tsx` and `AgentIcon.tsx` rendering localized agent names while keeping brand names untranslated (FR-087)
-- [ ] T144 [US6] Wire `TopBar.tsx` to show the real agent badge and emit `agent_detected`; update `projectStore` on change
+- [X] T140 [US6] Create `tests/fixtures/agent-*` fixture projects covering Claude Code, Copilot, Gemini CLI, Cursor, Windsurf, Amazon Q, Codex CLI, Qwen Code, opencode, Kilo Code, Auggie CLI, Roo Code, and a generic-only project
+- [X] T141 [US6] Implement `src-tauri/src/services/agent_detector.rs` with the priority chain (config → fingerprint → generic) returning `AgentProfile`
+- [X] T142 [US6] Implement `src-tauri/src/commands/agent.rs::agent_detect` and `agent_list_known`
+- [X] T143 [P] [US6] Create `src/components/agent/AgentBadge.tsx` and `AgentIcon.tsx` rendering localized agent names while keeping brand names untranslated (FR-087)
+- [X] T144 [US6] Wire `TopBar.tsx` to show the real agent badge and emit `agent_detected`; update `projectStore` on change
 
 **Checkpoint**: Every feature built so far works for all 12 agents + generic.
 
@@ -303,16 +303,16 @@
 
 ### Tests for User Story 7 ⚠️ (write first, ensure FAILING)
 
-- [ ] T145 [P] [US7] Contract test `src-tauri/tests/cmd_notify_system.rs` covering the info / warn / error levels
-- [ ] T146 [P] [US7] Vitest `src/stores/configStore.test.ts` asserting the `notificationsEnabled` toggle persists through `config_set_*`
+- [X] T145 [P] [US7] Contract test `src-tauri/tests/cmd_notify_system.rs` covering the info / warn / error levels
+- [X] T146 [P] [US7] Vitest `src/stores/configStore.test.ts` asserting the `notificationsEnabled` toggle persists through `config_set_*`
 - [ ] T147 [P] [US7] Playwright `tests/e2e/notifications.spec.ts` running the enabled / disabled scenarios
 
 ### Implementation for User Story 7
 
-- [ ] T148 [US7] Implement `src-tauri/src/commands/config.rs::notify_system` wrapping `tauri-plugin-notification`
-- [ ] T149 [US7] Extend `AppConfig` with `notificationsEnabled: bool` and implement `config_set_notifications_enabled`
-- [ ] T150 [P] [US7] Create `src/components/settings/NotificationToggle.tsx` wired to `configStore`
-- [ ] T151 [US7] Hook `useSpeckitEvents.ts` to call `notify_system` on `steps_state_changed` transitions to `done` or `failed` when the toggle is on and the window is unfocused
+- [X] T148 [US7] Implement `src-tauri/src/commands/config.rs::notify_system` wrapping `tauri-plugin-notification`
+- [X] T149 [US7] Extend `AppConfig` with `notificationsEnabled: bool` and implement `config_set_notifications_enabled`
+- [X] T150 [P] [US7] Create `src/components/settings/NotificationToggle.tsx` wired to `configStore`
+- [X] T151 [US7] Hook `useSpeckitEvents.ts` to call `notify_system` on `steps_state_changed` transitions to `done` or `failed` when the toggle is on and the window is unfocused
 
 **Checkpoint**: All seven user stories shipped.
 
