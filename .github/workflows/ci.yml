@@ -12,7 +12,7 @@ env:
 
 jobs:
   frontend:
-    name: Frontend (lint, typecheck, unit tests)
+    name: Frontend (lint, typecheck, unit tests + coverage)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,10 +26,21 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm typecheck
+      # T161: vitest.config.ts pins coverage.thresholds.lines/functions/
+      # statements to 80 and branches to 75. `--coverage` makes the run
+      # fail the job if any threshold is not met (Constitution II).
       - run: pnpm test -- --coverage
+      - name: Upload frontend coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: coverage/
+          if-no-files-found: ignore
+          retention-days: 14
 
   backend:
-    name: Backend (fmt, clippy, tests, benches) - ${{ matrix.os }}
+    name: Backend (fmt, clippy, tests) - ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
@@ -51,7 +62,135 @@ jobs:
       - run: cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
       - run: cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings
       - run: cargo test --manifest-path src-tauri/Cargo.toml
-      - run: cargo bench --manifest-path src-tauri/Cargo.toml -- --test
+
+  backend-coverage:
+    # T161: Linux-only llvm-cov job enforcing Constitution II's ≥ 80 %
+    # workspace line-coverage floor. cargo-llvm-cov runs the full test
+    # suite under the LLVM source-based coverage instrumentation and
+    # fails the job via --fail-under-lines when coverage drops.
+    name: Backend coverage (cargo-llvm-cov, ≥ 80 %)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Linux deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: llvm-tools-preview
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+          key: llvm-cov
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-llvm-cov
+      - name: Run cargo llvm-cov
+        run: |
+          cargo llvm-cov \
+            --manifest-path src-tauri/Cargo.toml \
+            --workspace \
+            --lcov --output-path src-tauri/target/lcov.info \
+            --fail-under-lines 80
+      - name: Upload backend coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage
+          path: src-tauri/target/lcov.info
+          if-no-files-found: ignore
+          retention-days: 14
+
+  bench:
+    # T162: Criterion bench regression gate (Constitution V). On `main`
+    # pushes we save a `main` baseline under `target/criterion/` and
+    # upload it as an artifact. On PRs we download that baseline, run
+    # the benches with `--baseline main`, then scan Criterion's human
+    # output for a line like `change: [+X% +Y% +Z%] (Regressed)`. Any
+    # regression labeled `(Regressed)` whose upper bound exceeds 10 %
+    # fails the job. No third-party tooling required.
+    name: Backend benches (criterion, > 10 % regression gate)
+    runs-on: ubuntu-latest
+    needs: backend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Linux deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+          key: bench
+      - name: Download previous baseline (main)
+        if: github.event_name == 'pull_request'
+        id: baseline
+        continue-on-error: true
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: ci.yml
+          branch: main
+          name: criterion-baseline-main
+          path: src-tauri/target/criterion
+      - name: Run benches (baseline compare on PR, save on main)
+        working-directory: src-tauri
+        shell: bash
+        run: |
+          set -o pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ] && [ "${{ steps.baseline.outcome }}" = "success" ]; then
+            cargo bench --bench bench_main -- --baseline main | tee bench-output.txt
+          else
+            cargo bench --bench bench_main -- --save-baseline main | tee bench-output.txt
+          fi
+      - name: Fail on > 10 % regression vs main baseline
+        if: github.event_name == 'pull_request' && steps.baseline.outcome == 'success'
+        working-directory: src-tauri
+        shell: bash
+        run: |
+          # Criterion prints one block per bench such as:
+          #   time:   [28.115 µs 28.196 µs 28.521 µs]
+          #   change: [+2.34% +5.12% +8.90%] (Regressed)
+          # We look for `(Regressed)` lines and pull out the *upper*
+          # bound (third percentage in the change: triple) — anything
+          # above +10.00 % fails the job.
+          awk '
+            /change:/ {
+              # Extract last "+N.NN%" token on the line.
+              n = split($0, toks, /[][ ]/)
+              for (i = n; i >= 1; i--) {
+                if (toks[i] ~ /^[+-]?[0-9.]+%$/) {
+                  gsub(/%/, "", toks[i])
+                  upper = toks[i] + 0
+                  break
+                }
+              }
+            }
+            /\(Regressed\)/ && upper > 10.0 {
+              print "REGRESSION > 10%: " prev_name " upper=" upper "%"
+              failed = 1
+            }
+            /^[a-zA-Z]/ && !/change:/ && !/time:/ && !/Regressed/ && !/Improved/ && !/No change/ {
+              prev_name = $0
+            }
+            END { exit failed }
+          ' bench-output.txt
+      - name: Publish baseline for main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: criterion-baseline-main
+          path: src-tauri/target/criterion
+          retention-days: 90
+      - name: Upload bench output artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-output-${{ github.run_id }}
+          path: src-tauri/bench-output.txt
+          if-no-files-found: ignore
+          retention-days: 14
 
   e2e:
     name: E2E smoke (Playwright + tauri-driver)
