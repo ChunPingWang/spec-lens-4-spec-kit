@@ -9,15 +9,19 @@
 //!     ≤ 5 ms on a 1 MiB file.
 //!   * `tasks_parser::parse` — FR-052 task parsing, ≤ 5 ms on a 1 000-line
 //!     Markdown checklist (T108).
+//!   * `output_buffer::slice` — FR-080 terminal slice retrieval, ≤ 1 ms
+//!     for a 1 000-line window over a 10 000-line in-memory buffer
+//!     (T089).
 
 use std::fmt::Write as _FmtWrite;
 use std::io::Write as _;
 
 use chrono::Utc;
 use criterion::{black_box, criterion_group, criterion_main, Criterion, Throughput};
-use speclens_lib::models::{AppConfig, RecentProject, TaskFileFormat};
+use speclens_lib::models::{AppConfig, OutputLine, OutputStream, RecentProject, TaskFileFormat};
 use speclens_lib::services::doc_hash_store::compute_sha256_hex;
 use speclens_lib::services::highlight_rules::{default_compiled, first_match};
+use speclens_lib::services::output_buffer::OutputBuffer;
 use speclens_lib::services::tasks_parser::parse as parse_tasks;
 use tempfile::tempdir;
 use uuid::Uuid;
@@ -140,11 +144,52 @@ fn bench_tasks_parser(c: &mut Criterion) {
     group.finish();
 }
 
+fn make_line(seq_hint: u64, i: usize) -> OutputLine {
+    OutputLine {
+        seq: seq_hint,
+        ts: 1_713_000_000 + i as u64,
+        stream: if i % 3 == 0 {
+            OutputStream::Stderr
+        } else {
+            OutputStream::Stdout
+        },
+        text: format!("line {i:05} — spec-kit run tick, payload={}", i * 7),
+        ansi_spans: None,
+        highlight: None,
+        step_id: None,
+    }
+}
+
+fn bench_terminal_buffer_slice(c: &mut Criterion) {
+    // 10 000-line buffer, ask for 1 000 lines from the middle. The buffer
+    // max is set large enough that nothing spills to disk, so we are
+    // measuring the hot in-memory slice path that serves FR-080.
+    let dir = tempdir().expect("tempdir");
+    let spill = dir.path().join("bench.ndjson");
+    let mut buffer = OutputBuffer::new(20_000, 64, spill);
+    for i in 0..10_000 {
+        let (_seq, _spilled) = buffer.push(make_line(0, i)).expect("push ok");
+    }
+
+    let mut group = c.benchmark_group("output_buffer");
+    group.throughput(Throughput::Elements(1_000));
+    group.bench_function("slice/1k-of-10k", |b| {
+        b.iter(|| {
+            let slice = buffer
+                .slice(black_box(4_000), black_box(5_000))
+                .expect("slice ok");
+            black_box(slice.len());
+        });
+    });
+    group.finish();
+}
+
 criterion_group!(
     benches,
     bench_touch_recent,
     bench_highlight_rules,
     bench_doc_hash_recompute,
-    bench_tasks_parser
+    bench_tasks_parser,
+    bench_terminal_buffer_slice
 );
 criterion_main!(benches);

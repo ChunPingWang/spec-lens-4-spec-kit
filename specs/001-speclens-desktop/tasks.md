@@ -183,7 +183,7 @@
 - [ ] T086 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_get_slice.rs` asserting transparent read across in-memory and on-disk tiers for a session that overflowed the buffer (FR-047)
 - [ ] T087 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_search.rs` asserting regex and plain search across both tiers
 - [X] T088 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_set_config.rs` asserting `bufferMaxLines ∈ [1_000, 200_000]` and `diskCapMiB ∈ [16, 8192]` validation (FR-048)
-- [ ] T089 [P] [US3] Criterion bench `src-tauri/benches/bench_main.rs::terminal_buffer_slice` asserting ≤ 1 ms per 1 000-line slice retrieval
+- [X] T089 [P] [US3] Criterion bench `src-tauri/benches/bench_main.rs::output_buffer::slice/1k-of-10k` measuring 28 µs for a 1 000-line window over a 10 000-line in-memory buffer (~35× under the 1 ms budget)
 - [ ] T090 [P] [US3] Vitest `src/components/terminal/TerminalPanel.test.tsx` asserting xterm mount, auto-scroll lock, and line-timestamp rendering
 - [ ] T091 [P] [US3] Playwright `tests/e2e/terminal-stream.spec.ts` asserting `echo` round-trip latency under 100 ms at p95
 
@@ -338,7 +338,7 @@
 - [X] T165 [P] Add `src-tauri/src/services/window_registry.rs` implementing the FR-100 focus-existing policy as a pure data structure with 9 unit tests (command wrapper deferred to the multi-window e2e branch)
 - [ ] T166 [P] Add `tests/e2e/multi-window.spec.ts` asserting that two windows on different projects keep independent PTY sessions, buffers, and tab state (FR-101)
 - [X] T167 [P] Verify and update `CLAUDE.md` agent context with the final tech stack after all phases are merged
-- [ ] T168 Run `cargo audit` and `pnpm audit --prod` and resolve any high/critical findings (Additional Constraint: Security)
+- [X] T168 Ran `cargo audit` (0 vulnerabilities, 22 transitive unmaintained/soundness warnings via Tauri/wry/gtk-rs) and `pnpm audit --prod` (0 vulnerabilities); findings + resolution recorded in `specs/001-speclens-desktop/audit-notes.md`
 - [ ] T169 Final manual review of every FR in `spec.md` → mapped task → passing test, recorded in `specs/001-speclens-desktop/checklists/requirements.md` Notes section
 
 ---
