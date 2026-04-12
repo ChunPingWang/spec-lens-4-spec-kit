@@ -38,7 +38,10 @@
     "noOverview": "尚無總覽內容 — 執行此步驟以產出摘要。",
     "selectDocumentHint": "點選左側文件即可預覽內容。",
     "truncatedNotice": "預覽已截斷 — 請至編輯器開啟完整內容。",
-    "tasksPlaceholder": "任務檔選擇器將於 Phase 6 (US4) 提供。"
+    "tasksPlaceholder": "任務檔選擇器將於 Phase 6 (US4) 提供。",
+    "terminalSliceToggle": "終端機輸出",
+    "terminalSliceHeading": "終端機 ({{count}})",
+    "noTerminalOutput": "此步驟尚無終端機輸出。"
   },
   "tasks": {
     "pickerTitle": "選擇任務檔",
@@ -118,7 +121,20 @@
     "connect": "連線",
     "disconnect": "中斷連線",
     "autoScrollLabel": "自動捲動",
-    "mirrorLabel": "終端機輸出鏡像"
+    "mirrorLabel": "終端機輸出鏡像",
+    "searchPlaceholder": "搜尋…",
+    "searchLabel": "搜尋終端機",
+    "regexToggle": "正規表達式",
+    "clearSearch": "清除搜尋",
+    "severityFilterGroup": "嚴重性篩選",
+    "copy": "複製",
+    "exportLog": "匯出 .log",
+    "exportTxt": "匯出 .txt",
+    "clearView": "清除畫面",
+    "quickCommandsGroup": "快速指令",
+    "cmdStatus": "spec-kit status",
+    "cmdRun": "spec-kit run",
+    "cmdValidate": "spec-kit validate"
   },
   "steps": {
     "status": {

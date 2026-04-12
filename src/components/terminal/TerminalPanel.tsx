@@ -7,13 +7,16 @@
  * inside a `useEffect`; the component falls back to a plain `<ul>` mirror
  * of `recentLines` when xterm is unavailable (tests and the initial paint).
  */
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { usePtySession } from "@/hooks/usePtySession";
+import { invoke } from "@/lib/tauri";
 import type { SpecLensIpcError } from "@/lib/tauri";
 import { useTerminalStore } from "@/stores";
-import type { OutputLine, Uuid } from "@/types/ipc";
+import type { HighlightSeverity, OutputLine, TerminalSearchResponse, Uuid } from "@/types/ipc";
+
+import { TerminalToolbar } from "./TerminalToolbar";
 
 interface TerminalPanelProps {
   projectId: Uuid | null;
@@ -37,6 +40,8 @@ export function TerminalPanel({ projectId }: TerminalPanelProps) {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const handlesRef = useRef<XtermHandles | null>(null);
   const [autoScrollLocked, setAutoScrollLocked] = useState<boolean>(true);
+  const [severityFilter, setSeverityFilter] = useState<HighlightSeverity | null>(null);
+  const [searchResultCount, setSearchResultCount] = useState(0);
 
   // Subscribe to PTY events. Writes new lines into xterm if available and
   // always mirrors into the store's recentLines.
@@ -122,6 +127,54 @@ export function TerminalPanel({ projectId }: TerminalPanelProps) {
     }
   }
 
+  const handleSearch = useCallback(
+    async (query: string, isRegex: boolean) => {
+      if (!descriptor) return;
+      try {
+        const res = await invoke<TerminalSearchResponse>("terminal_search", {
+          sessionId: descriptor.sessionId,
+          pattern: query,
+          caseSensitive: false,
+          isRegex,
+        });
+        setSearchResultCount(res.matches.length);
+      } catch {
+        setSearchResultCount(0);
+      }
+    },
+    [descriptor],
+  );
+
+  const handleClearSearch = useCallback(() => {
+    setSearchResultCount(0);
+  }, []);
+
+  const handleClearView = useCallback(() => {
+    useTerminalStore.getState().clear();
+  }, []);
+
+  const handleCopy = useCallback(async () => {
+    const lines = useTerminalStore.getState().recentLines;
+    const text = lines.map((l) => `[${formatTimestamp(l.ts)}] ${l.text}`).join("\n");
+    await navigator.clipboard.writeText(text);
+  }, []);
+
+  const handleExport = useCallback(
+    (format: "log" | "txt") => {
+      const lines = useTerminalStore.getState().recentLines;
+      const header = `# SpecLens Terminal Export — ${new Date().toISOString()}\n# Session: ${descriptor?.sessionId ?? "N/A"}\n\n`;
+      const body = lines.map((l) => `[${formatTimestamp(l.ts)}] ${l.text}`).join("\n");
+      const blob = new Blob([header + body], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `terminal-export.${format}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    },
+    [descriptor],
+  );
+
   const status = useMemo<string>(() => {
     if (error) return formatError(error);
     if (connecting) return t("terminal.connecting", { defaultValue: "Connecting…" });
@@ -141,15 +194,6 @@ export function TerminalPanel({ projectId }: TerminalPanelProps) {
           {t("workspace.terminalHeading", { defaultValue: "Terminal" })}
         </h2>
         <div className="flex items-center gap-2 text-xs">
-          <label className="flex items-center gap-1 text-muted-foreground">
-            <input
-              type="checkbox"
-              checked={autoScrollLocked}
-              onChange={(e) => setAutoScrollLocked(e.target.checked)}
-              aria-label={t("terminal.autoScrollLabel", { defaultValue: "Auto-scroll" })}
-            />
-            {t("terminal.autoScrollLabel", { defaultValue: "Auto-scroll" })}
-          </label>
           {descriptor ? (
             <button
               type="button"
@@ -174,6 +218,19 @@ export function TerminalPanel({ projectId }: TerminalPanelProps) {
           )}
         </div>
       </div>
+      <TerminalToolbar
+        connected={!!descriptor}
+        autoScroll={autoScrollLocked}
+        onAutoScrollChange={setAutoScrollLocked}
+        onSearch={(q, r) => void handleSearch(q, r)}
+        onClearSearch={handleClearSearch}
+        onClearView={handleClearView}
+        onCopy={() => void handleCopy()}
+        onExport={handleExport}
+        severityFilter={severityFilter}
+        onSeverityFilterChange={setSeverityFilter}
+        searchResultCount={searchResultCount}
+      />
       <p className="px-2 py-1 text-xs text-muted-foreground" aria-live="polite">
         {status}
       </p>

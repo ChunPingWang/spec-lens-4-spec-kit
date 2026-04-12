@@ -236,6 +236,23 @@ export interface OutputLine {
   stepId?: string;
 }
 
+export interface TerminalSearchHit {
+  seq: number;
+  start: number;
+  end: number;
+  text: string;
+}
+
+export interface TerminalSearchResponse {
+  matches: TerminalSearchHit[];
+}
+
+export interface TerminalSliceResponse {
+  lines: OutputLine[];
+  fromSeq: number;
+  toSeq: number;
+}
+
 export interface PtySessionDescriptor {
   sessionId: Uuid;
   windowId: string;

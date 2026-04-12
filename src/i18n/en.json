@@ -38,7 +38,10 @@
     "noOverview": "No overview content yet — run this step to populate its summary.",
     "selectDocumentHint": "Select a document on the left to preview it.",
     "truncatedNotice": "Preview truncated — open the file in your editor for the full content.",
-    "tasksPlaceholder": "Task file picker lands in Phase 6 (US4)."
+    "tasksPlaceholder": "Task file picker lands in Phase 6 (US4).",
+    "terminalSliceToggle": "Terminal output",
+    "terminalSliceHeading": "Terminal ({{count}})",
+    "noTerminalOutput": "No terminal output for this step yet."
   },
   "tasks": {
     "pickerTitle": "Pick task files",
@@ -118,7 +121,20 @@
     "connect": "Connect",
     "disconnect": "Disconnect",
     "autoScrollLabel": "Auto-scroll",
-    "mirrorLabel": "Terminal output mirror"
+    "mirrorLabel": "Terminal output mirror",
+    "searchPlaceholder": "Search…",
+    "searchLabel": "Search terminal",
+    "regexToggle": "Regex",
+    "clearSearch": "Clear search",
+    "severityFilterGroup": "Severity filters",
+    "copy": "Copy",
+    "exportLog": "Export .log",
+    "exportTxt": "Export .txt",
+    "clearView": "Clear view",
+    "quickCommandsGroup": "Quick commands",
+    "cmdStatus": "spec-kit status",
+    "cmdRun": "spec-kit run",
+    "cmdValidate": "spec-kit validate"
   },
   "steps": {
     "status": {

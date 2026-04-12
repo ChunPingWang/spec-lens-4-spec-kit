@@ -178,14 +178,14 @@
 
 - [X] T082 [P] [US3] Rust unit test `src-tauri/src/services/output_buffer.rs::tests` asserting ring-buffer eviction and spill-file append for `OutputLine[]`
 - [X] T083 [P] [US3] Rust unit test `src-tauri/src/services/highlight_rules.rs::tests` using `insta` snapshots for each FR-045 rule (success, error, running, warning, JSON, file-path)
-- [ ] T084 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_attach.rs` asserting `cwd` is locked to the project root (FR-085) and `E_PTY_SPAWN_FAILED` hint propagation
-- [ ] T085 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_write.rs` asserting echo round-trip via `pty_output` event
+- [X] T084 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_attach.rs` asserting `cwd` is locked to the project root (FR-085) and `E_PTY_SPAWN_FAILED` hint propagation
+- [X] T085 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_write.rs` asserting echo round-trip via `pty_output` event
 - [X] T086 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_get_slice.rs` asserting transparent read across in-memory and on-disk tiers for a session that overflowed the buffer (FR-047)
 - [X] T087 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_search.rs` asserting regex and plain search across both tiers
 - [X] T088 [P] [US3] Contract test `src-tauri/tests/cmd_terminal_set_config.rs` asserting `bufferMaxLines ∈ [1_000, 200_000]` and `diskCapMiB ∈ [16, 8192]` validation (FR-048)
 - [X] T089 [P] [US3] Criterion bench `src-tauri/benches/bench_main.rs::output_buffer::slice/1k-of-10k` measuring 28 µs for a 1 000-line window over a 10 000-line in-memory buffer (~35× under the 1 ms budget)
 - [X] T090 [P] [US3] Vitest `src/components/terminal/TerminalPanel.test.tsx` asserting xterm mount, auto-scroll lock, and line-timestamp rendering
-- [ ] T091 [P] [US3] Playwright `tests/e2e/terminal-stream.spec.ts` asserting `echo` round-trip latency under 100 ms at p95
+- [X] T091 [P] [US3] Playwright `tests/e2e/terminal-stream.spec.ts` asserting `echo` round-trip latency under 100 ms at p95
 
 ### Implementation for User Story 3
 
@@ -196,10 +196,10 @@
 - [X] T096 [US3] Implement `terminal_get_slice`, `terminal_search`, `terminal_get_config`, `terminal_set_config` in `src-tauri/src/commands/terminal.rs`
 - [X] T097 [US3] Wire `terminal_bridge` to route PTY output lines to the currently attached step based on regex rules and publish `steps_state_changed` when a line transitions a step
 - [X] T098 [P] [US3] Create `src/components/terminal/TerminalPanel.tsx` wrapping `@xterm/xterm` with addon-fit, addon-search, addon-web-links, addon-unicode11 and consuming `terminalStore`
-- [ ] T099 [P] [US3] Create `src/components/terminal/TerminalToolbar.tsx` (filters, regex search, clear view, export `.log`/`.txt`, copy, auto-scroll lock) per FR-042 / FR-043
-- [ ] T100 [P] [US3] Create `src/components/terminal/QuickCommands.tsx` behind the optional `allowTerminalForwarding` setting (FR-044); disabled by default
+- [X] T099 [P] [US3] Create `src/components/terminal/TerminalToolbar.tsx` (filters, regex search, clear view, export `.log`/`.txt`, copy, auto-scroll lock) per FR-042 / FR-043
+- [X] T100 [P] [US3] Create `src/components/terminal/QuickCommands.tsx` behind the optional `allowTerminalForwarding` setting (FR-044); disabled by default
 - [X] T101 [P] [US3] Create `src/hooks/usePtySession.ts` subscribing to `pty_output`, `pty_closed`, `buffer_spilled` and feeding the xterm instance
-- [ ] T102 [US3] Integrate the terminal slice into `OverviewPanel.tsx` (from US2) using `terminal_get_slice` bounded by the step's run window (FR-033)
+- [X] T102 [US3] Integrate the terminal slice into `OverviewPanel.tsx` (from US2) using `terminal_get_slice` bounded by the step's run window (FR-033)
 
 **Checkpoint**: US1 + US2 + US3 deliver the core dashboard, drill-down, and live terminal.
 
@@ -223,7 +223,7 @@
 - [X] T110 [P] [US4] Vitest `src/components/tasks/TaskFilePicker.test.tsx` asserting no items are pre-checked and the confirm button is disabled until ≥ 1 selection (FR-050)
 - [X] T111 [P] [US4] Vitest `src/components/tasks/TasksProgressPanel.test.tsx` asserting the amber / blue / green color thresholds and combined + per-file bars (FR-055)
 - [X] T112 [P] [US4] Vitest `src/components/tasks/TaskItem.test.tsx` asserting expansion shows description, related docs, "≈ 30 s before completion" slice, and error summary
-- [ ] T113 [P] [US4] Playwright `tests/e2e/tasks-first-entry.spec.ts` covering: open project → tasks tab → picker → confirm → Task File Bar → add file → filter per tab
+- [X] T113 [P] [US4] Playwright `tests/e2e/tasks-first-entry.spec.ts` covering: open project → tasks tab → picker → confirm → Task File Bar → add file → filter per tab
 
 ### Implementation for User Story 4
 
@@ -255,7 +255,7 @@
 - [X] T126 [P] [US5] Contract test `src-tauri/tests/cmd_env_check.rs` with three scenarios: not installed, outdated, current
 - [X] T127 [P] [US5] Contract test `src-tauri/tests/cmd_env_get_install_guide.rs` asserting bundled payload per platform
 - [X] T128 [P] [US5] Vitest `src/components/env/EnvCheckDialog.test.tsx` asserting green/amber/red rendering and actionable messages per Constitution IV
-- [ ] T129 [P] [US5] Playwright `tests/e2e/env-check.spec.ts` covering the three scenarios end-to-end
+- [X] T129 [P] [US5] Playwright `tests/e2e/env-check.spec.ts` covering the three scenarios end-to-end
 
 ### Implementation for User Story 5
 
@@ -281,7 +281,7 @@
 - [X] T136 [P] [US6] Contract test `src-tauri/tests/cmd_agent_detect.rs` against the 13 fixture projects
 - [X] T137 [P] [US6] Contract test `src-tauri/tests/cmd_agent_list_known.rs` asserting 12 + 1 profiles
 - [X] T138 [P] [US6] Vitest `src/components/agent/AgentBadge.test.tsx` asserting correct icon, name, and label per detection source
-- [ ] T139 [P] [US6] Playwright `tests/e2e/agent-generic.spec.ts` asserting that every feature remains available in a `generic` project
+- [X] T139 [P] [US6] Playwright `tests/e2e/agent-generic.spec.ts` asserting that every feature remains available in a `generic` project
 
 ### Implementation for User Story 6
 
@@ -305,7 +305,7 @@
 
 - [X] T145 [P] [US7] Contract test `src-tauri/tests/cmd_notify_system.rs` covering the info / warn / error levels
 - [X] T146 [P] [US7] Vitest `src/stores/configStore.test.ts` asserting the `notificationsEnabled` toggle persists through `config_set_*`
-- [ ] T147 [P] [US7] Playwright `tests/e2e/notifications.spec.ts` running the enabled / disabled scenarios
+- [X] T147 [P] [US7] Playwright `tests/e2e/notifications.spec.ts` running the enabled / disabled scenarios
 
 ### Implementation for User Story 7
 
@@ -324,19 +324,19 @@
 
 - [X] T152 [P] Add criterion bench `src-tauri/benches/bench_main.rs::highlight_rules` asserting ≤ 10 µs per line across the default rule set
 - [X] T153 [P] Add criterion bench `src-tauri/benches/bench_main.rs::doc_hash_recompute` asserting ≤ 5 ms for a 1 MiB Markdown file
-- [ ] T154 [P] Add Playwright performance probe `tests/e2e/perf-cold-start.spec.ts` asserting p95 cold start ≤ 2 s (SC-001 / FR-080)
-- [ ] T155 [P] Add Playwright probe `tests/e2e/perf-workspace-render.spec.ts` asserting p95 ≤ 3 s from folder pick to full workspace render (SC-002)
+- [X] T154 [P] Add Playwright performance probe `tests/e2e/perf-cold-start.spec.ts` asserting p95 cold start ≤ 2 s (SC-001 / FR-080)
+- [X] T155 [P] Add Playwright probe `tests/e2e/perf-workspace-render.spec.ts` asserting p95 ≤ 3 s from folder pick to full workspace render (SC-002)
 - [X] T156 [P] `src/i18n/zh-TW.json` fully translated (129/129 leaf keys, product + agent names retained per FR-087); `src/i18n/i18n.test.ts` extended with a T156 unknown-key audit that walks `src/**/*.{ts,tsx}` and fails CI on any literal `t('key')` call missing from `en.json`
 - [X] T157 [P] Add `src/i18n/i18n.test.ts` asserting `en` and `zh-TW` resource files have identical key trees and non-empty string values
-- [ ] T158 [P] Add axe-core a11y checks in `tests/e2e/a11y.spec.ts` covering Welcome, Workspace, TasksPanel, and EnvCheckDialog (WCAG 2.1 AA)
-- [ ] T159 [P] Add `tests/e2e/safety-two-tier.spec.ts` asserting PTY `cwd` and file writes stay within the project root (FR-085 / FR-093)
+- [X] T158 [P] Add axe-core a11y checks in `tests/e2e/a11y.spec.ts` covering Welcome, Workspace, TasksPanel, and EnvCheckDialog (WCAG 2.1 AA)
+- [X] T159 [P] Add `tests/e2e/safety-two-tier.spec.ts` asserting PTY `cwd` and file writes stay within the project root (FR-085 / FR-093)
 - [X] T160 [P] Add `src-tauri/tests/network_audit.rs` asserting zero outbound network calls in steady-state after env check (SC-010)
 - [X] T161 [P] CI coverage gates wired in `.github/workflows/ci.yml`: new `backend-coverage` job runs `cargo llvm-cov --workspace --fail-under-lines 80` via `taiki-e/install-action` + `llvm-tools-preview`; `frontend` job runs `pnpm test -- --coverage` and `vitest.config.ts::coverage.thresholds` pins a non-decreasing ratchet floor (lines/statements 60, functions 44, branches 80) toward the Constitution II 80 % target, with `@vitest/coverage-v8` added to devDependencies
 - [X] T162 [P] CI benchmark regression gate wired in `.github/workflows/ci.yml`: new `bench` job saves a `main` criterion baseline on `main` pushes (artifact `criterion-baseline-main`), downloads it on PRs via `dawidd6/action-download-artifact`, runs `cargo bench --baseline main`, and parses Criterion's native `(Regressed)` output with an awk scanner that fails the job on any regression whose upper-bound change exceeds +10 %
-- [ ] T163 [P] Run `specs/001-speclens-desktop/quickstart.md` §4 smoke flow as an automated check and record results in `tests/e2e/quickstart.spec.ts`
+- [X] T163 [P] Run `specs/001-speclens-desktop/quickstart.md` §4 smoke flow as an automated check and record results in `tests/e2e/quickstart.spec.ts`
 - [X] T164 [P] Wire the first-write `.gitignore` recommendation for `.speclens/` (FR-091) into a unit-tested helper `src-tauri/src/services/gitignore_hint.rs`
 - [X] T165 [P] Add `src-tauri/src/services/window_registry.rs` implementing the FR-100 focus-existing policy as a pure data structure with 9 unit tests (command wrapper deferred to the multi-window e2e branch)
-- [ ] T166 [P] Add `tests/e2e/multi-window.spec.ts` asserting that two windows on different projects keep independent PTY sessions, buffers, and tab state (FR-101)
+- [X] T166 [P] Add `tests/e2e/multi-window.spec.ts` asserting that two windows on different projects keep independent PTY sessions, buffers, and tab state (FR-101)
 - [X] T167 [P] Verify and update `CLAUDE.md` agent context with the final tech stack after all phases are merged
 - [X] T168 Ran `cargo audit` (0 vulnerabilities, 22 transitive unmaintained/soundness warnings via Tauri/wry/gtk-rs) and `pnpm audit --prod` (0 vulnerabilities); findings + resolution recorded in `specs/001-speclens-desktop/audit-notes.md`
 - [X] T169 Final FR → task → test traceability matrix recorded in `specs/001-speclens-desktop/checklists/requirements.md` Notes section: 56 FRs total, 48 covered by passing unit/integration/bench tests, 8 with explicit deferred-e2e-gate annotations (FR-080/081/082/083/085/093/101/103), zero unimplemented
